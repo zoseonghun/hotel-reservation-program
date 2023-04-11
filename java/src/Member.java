@@ -21,6 +21,8 @@ public class Member {
         this.phone = phone;
         this.email = email;
         this.gender = gender;
+        this.history = 0;
+        this.mileage = 0;
         this.reservationList = new ArrayList<>();
     }
 
@@ -36,10 +38,6 @@ public class Member {
             case 2, 3, 4 -> 0.05;
             default -> 0.1;
         };
-    }
-
-    public void increaseHistory(){
-        this.history += 1;
     }
     public void addReservationList(Reservation reservation){
         increaseMileage((int)reservation.getCost());
