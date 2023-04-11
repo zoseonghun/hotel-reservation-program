@@ -14,10 +14,7 @@ public class Review {
         this.detail = detail;
         this.reservation = reservation;
         this.rate = rate;
-    }
-
-    public void addReply(String reply) {
-
+        this.writer = reservation.getMember();
     }
 
     @Override
