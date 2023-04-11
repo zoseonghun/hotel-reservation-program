@@ -25,14 +25,19 @@ public class Member {
     }
 
     public void increaseMileage(int cost){
-        double mileageRate = switch (this.history / 10) {
+        double mileageRate = getMileageRate();
+        this.mileage += (cost * mileageRate);
+    }
+
+    public double getMileageRate() {
+        return switch (this.history / 10) {
             case 0 -> 0.01;
             case 1 -> 0.02;
             case 2, 3, 4 -> 0.05;
             default -> 0.1;
         };
-        this.mileage += (cost * mileageRate);
     }
+
     public void increaseHistory(){
         this.history += 1;
     }
@@ -48,12 +53,7 @@ public class Member {
     }
 
     private void decreaseMileage(int cost) {
-        double mileageRate = switch (this.history / 10) {
-            case 0 -> 0.01;
-            case 1 -> 0.02;
-            case 2, 3, 4 -> 0.05;
-            default -> 0.1;
-        };
+        double mileageRate = getMileageRate();
         this.mileage -= (cost * mileageRate);
     }
 
