@@ -25,12 +25,19 @@ public class Reservation {
     }
 
     private void calcCost() {
-        int dolorPerDay = switch (this.roomSize) {
-            case DELUXE_DOUBLE, DELUXE_TWIN -> 20;
-            case BOUTIQUE_KING -> 30;
-            case JR_SUITE -> 40;
-            case SUITE -> 50;
-            case PRESIDENTIAL_SUITE -> 60;
+        int dolorPerDay = 0;
+        switch (this.roomSize) {
+            case DELUXE_DOUBLE:
+            case DELUXE_TWIN:
+                dolorPerDay = 20;
+            case BOUTIQUE_KING:
+                dolorPerDay = 30;
+            case JR_SUITE:
+                dolorPerDay = 40;
+            case SUITE:
+                dolorPerDay = 50;
+            case PRESIDENTIAL_SUITE:
+                dolorPerDay = 60;
         };
 
         this.cost = dolorPerDay * ChronoUnit.DAYS.between(this.checkIn, this.checkOut);
