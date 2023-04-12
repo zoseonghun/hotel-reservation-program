@@ -7,7 +7,6 @@ public class Viewer {
     public final static String PROGRAM_VERSION = "1.0.0";
 
     public static void mainMenu() {
-        outer:
         while (true) {
 
             System.out.println("호텔 예약 프로그램 ver : " + PROGRAM_VERSION);
@@ -31,7 +30,7 @@ public class Viewer {
                     Reservation targetRsvn = selectReservation(rsvnList);
                     //수정 또는 삭제 중 선택하기
                     modifyOrDelete(targetRsvn);
-                    break outer;
+                    break;
                 case "3":
                     break;
                 case "4":
