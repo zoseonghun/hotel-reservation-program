@@ -23,4 +23,8 @@ public class Utility {
     public static void makeLine() {
         System.out.println("====================================================");
     }
+
+    public static void pause(){
+        input("계속 진행하시려면 엔터를 입력하세요");
+    }
 }
