@@ -1,32 +1,56 @@
+package review;
+
 public class Review {
 
+    private int num;
     private String title;
     private String detail;
-    private Member writer;
-    private Reservation reservation;
-    private Rate rate;
+    private String writer;
+    //    private Reservation reservation;
+//    private Rate rate;
     private String reply;
+    private String registDate;
+
 
     public Review() {}
 
-    public Review(String title, String detail, Reservation reservation, Rate rate) {
+    public Review(int num, String title, String detail, String writer, String reply, String registDate) {
+        this.num = num;
         this.title = title;
         this.detail = detail;
-        this.reservation = reservation;
-        this.rate = rate;
-        this.writer = reservation.getMember();
+//        this.writer = reservation.getMember();
+//        this.reservation = reservation;
+//        this.rate = rate;
+        this.reply = reply;
+        this.registDate = registDate;
     }
 
     @Override
     public String toString() {
         return "Review{" +
-                "title='" + title + '\'' +
+                "num=" + num +
+                ", title='" + title + '\'' +
                 ", detail='" + detail + '\'' +
                 ", writer=" + writer +
-                ", reservation=" + reservation +
-                ", rate=" + rate +
                 ", reply='" + reply + '\'' +
+                ", registDate='" + registDate + '\'' +
                 '}';
+    }
+
+    public String getRegistDate() {
+        return registDate;
+    }
+
+    public void setRegistDate(String registDate) {
+        this.registDate = registDate;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 
     public String getTitle() {
@@ -45,29 +69,29 @@ public class Review {
         this.detail = detail;
     }
 
-    public Member getWriter() {
+    public String getWriter() {
         return writer;
     }
 
-    public void setWriter(Member writer) {
+    public void setWriter(String writer) {
         this.writer = writer;
     }
 
-    public Reservation getReservation() {
-        return reservation;
-    }
+//    public Reservation getReservation() {
+//        return reservation;
+//    }
 
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
+//    public void setReservation(Reservation reservation) {
+//        this.reservation = reservation;
+//    }
 
-    public Rate getRate() {
-        return rate;
-    }
+//    public Rate getRate() {
+//        return rate;
+//    }
 
-    public void setRate(Rate rate) {
-        this.rate = rate;
-    }
+//    public void setRate(Rate rate) {
+//        this.rate = rate;
+//    }
 
     public String getReply() {
         return reply;
@@ -76,4 +100,5 @@ public class Review {
     public void setReply(String reply) {
         this.reply = reply;
     }
+
 }
