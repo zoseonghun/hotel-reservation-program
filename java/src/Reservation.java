@@ -38,6 +38,19 @@ public class Reservation {
     }
 
     @Override
+    public String toString() {
+        return "Reservation{" +
+                "reservationId=" + reservationId +
+                ", roomSize=" + roomSize +
+                ", member=" + member +
+                ", checkIn=" + checkIn +
+                ", checkOut=" + checkOut +
+                ", guestNum=" + guestNum +
+                ", cost=" + cost +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
