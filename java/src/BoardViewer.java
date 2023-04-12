@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class BoardDao {
+public class BoardViewer {
     Scanner scanner = new Scanner(System.in);
-    List<review.Review> boardList = new ArrayList<>(); // 게시글 객체를 저장할 List
+    List<Review> boardList = new ArrayList<>(); // 게시글 객체를 저장할 List
 
 
     public void getBoardList() {
@@ -22,7 +22,7 @@ public class BoardDao {
         if (boardList.isEmpty()) { // 게시글 객체들을 담은 리스트에 아무것도 없는 경우
             System.out.println("                       게시글 없음");
         }else {
-            for(review.Review rv : boardList) { // 글 번호를 1번부터 시작하기 위해 인덱스 +1
+            for(Review rv : boardList) { // 글 번호를 1번부터 시작하기 위해 인덱스 +1
                 //제목, 작성자 글자가 5자 넘어가면 3항연산자 사용 나머지 부분 ...으로 표시
                 System.out.printf("%d |%15s | %10s | %13s\n", boardList.indexOf(rv) + 1,
                         rv.getTitle().length() > 5 ? rv.getTitle().substring(0, 5) + "..." : rv.getTitle(),
@@ -37,7 +37,7 @@ public class BoardDao {
     }
 
     public void boardInsert() {// 개시글 새로쓰기
-        review.Review rv = new review.Review(); //게시글 객체 생성
+        Review rv = new Review(); //게시글 객체 생성
 
         System.out.println("글제목(취소 : quit):"); //제목 입력
         String title = scanner.nextLine();
@@ -79,7 +79,7 @@ public class BoardDao {
             System.out.println("게시글이 존재하지 않습니다.");
             return;
         }
-        review.Review rv = new review.Review(); // 게시글 객체 생성
+        Review rv = new Review(); // 게시글 객체 생성
         rv = boardList.get(select - 1); // 인덱스 = 글번호 -1. 해당 인덱스의 객체를 가져옴
         System.out.println("No. " + select); // 글 번호가 1부터 시작해서 + 1
         System.out.println("제목 : "+ rv.getTitle());
@@ -104,7 +104,7 @@ public class BoardDao {
         }
     }
 
-    public void boardAddreply(review.Review rv) {
+    public void boardAddreply(Review rv) {
         System.out.println("작성해주세요:");
         String comment = scanner.nextLine();
         rv.setReply(comment);
@@ -117,7 +117,7 @@ public class BoardDao {
             return;
         }
 
-        review.Review rv = new review.Review(); // 게시글 객체 생성
+        Review rv = new Review(); // 게시글 객체 생성
         rv = boardList.get(select - 1); // 인덱스 = 글번호 - 1. 해당 인덱스의 객체를 가져옴
 
         System.out.println("글제목(취소 : quit):"); // 제목 수정
@@ -160,7 +160,7 @@ public class BoardDao {
             return;
         }
 
-        review.Review rv = new review.Review();
+        Review rv = new Review();
         rv = boardList.get(select - 1); // 선택한 번호의 객체
         boardList.remove(boardList.indexOf(rv)); // 해당 인덱스에 있는 객체 삭제
         System.out.println(select + "번 글이 삭제되었습니다.");
@@ -182,7 +182,7 @@ public class BoardDao {
         Writer writer = new FileWriter("D/Temp/BoardDB.txt"); // 해당 경로를 참조하는 출력 스트림 객체 생성
         String [] data = new String[10000]; // 내보낼 문자열을 저장할 변수,
         for (int i = 0; i < boardList.size(); i++) { // boardList의 객체를 하나씩 불러 data에 해당 값들을 저장
-            review.Review rv = boardList.get(i);
+            Review rv = boardList.get(i);
             data[i] = boardList.indexOf(rv) + "|\t" + rv.getTitle() + "|\t" + rv.getDetail() + "|\t" + rv.getWriter()
                     + "|\t" + rv.getRegistDate() + "|\t\t";
             writer.write(data[i]); // 받아온 데이터를 출력
