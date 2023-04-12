@@ -32,12 +32,23 @@ public class Member {
     }
 
     public double getMileageRate() {
-        return switch (this.history / 10) {
-            case 0 -> 0.01;
-            case 1 -> 0.02;
-            case 2, 3, 4 -> 0.05;
-            default -> 0.1;
+        double v;
+        switch (this.history / 10) {
+            case 0:
+                v = 0.01;
+                break;
+            case 1:
+                v = 0.02;
+                break;
+            case 2:
+            case 3:
+            case 4:
+                v = 0.05;
+                break;
+            default:
+                v = 0.1;
         };
+        return v;
     }
     public void addReservationList(Reservation reservation){
         increaseMileage((int)reservation.getCost());
