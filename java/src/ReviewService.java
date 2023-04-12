@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class ReviewService {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in); // 입력 받는 객체
-        BoardDao dao = new BoardDao(); // 게시판 접근 객체
+        BoardViewer dao = new BoardViewer(); // 게시판 접근 객체
 
         // 게시판 프로그램
         while (true) {
