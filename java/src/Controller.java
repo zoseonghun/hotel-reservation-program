@@ -77,7 +77,7 @@ public class Controller {
                 .filter(availableRooms::contains) // 신기한 메서드 참조 - 자동완성 썼습니다
                 .collect(Collectors.toList())
                 .forEach(a -> a.reduceVacancy(selectedRoomSize));
-
+    }
 
 
     //예약번호로 예약 찾기
@@ -115,7 +115,7 @@ public class Controller {
     public static void modifyReservation(Reservation targetRsvn) {
         deleteReservation(targetRsvn);
         Viewer viewer = new Viewer();
-        viewer.makeReservation(targetRsvn);
+        viewer.makeReservation(targetRsvn.getMember());
     }
 
     //예약삭제 메서드
