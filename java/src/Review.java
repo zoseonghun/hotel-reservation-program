@@ -1,5 +1,3 @@
-package review;
-
 public class Review {
 
     private int num;
