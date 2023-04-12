@@ -1,5 +1,4 @@
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,32 @@ public class Controller {
         return availableDateList.stream()
                 .filter(availableDate -> availableDate.getDate().isAfter(checkIn) &&
                         availableDate.getDate().isBefore(checkOut))
+                .sorted(Comparator.comparing(AvailableDate::getDate))
                 .collect(Collectors.toList());
+
+    }
+
+    public static void confirmReservation(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
+        reduceAvailableRoom(availableRooms, selectedRoomSize);
+
+        Reservation reservation = new Reservation(selectedRoomSize, targetMember, availableRooms.get(0).getDate(), availableRooms.get(availableRooms.size() - 1).getDate(), guestNum);
+
+        addReservation(reservation);
+
+    }
+
+    private static void addReservation(Reservation reservation) {
+        reservationList.add(reservation);
+
+        reservation.getMember().addReservationList(reservation);
+    }
+
+    private static void reduceAvailableRoom(List<AvailableDate> availableRooms, RoomSize selectedRoomSize) {
+
+        availableDateList.stream()
+                .filter(availableRooms::contains) // 신기한 메서드 참조 - 자동완성 썼습니다
+                .collect(Collectors.toList())
+                .forEach(a -> a.reduceVacancy(selectedRoomSize));
 
     }
 }

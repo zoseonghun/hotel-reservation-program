@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static common.Utility.input;
 
@@ -33,21 +34,116 @@ public class Viewer {
         }
     }
 
-    private static void makeReservation() {
+    public static void makeReservation() {
         Member targetMember = searchMemberMenu();
 
         List<AvailableDate> availableRooms = searchAvailableRoomsMenu(targetMember);
 
-        AvailableDate selectedDateAndRoom = showAndSelectAvailableRooms(availableRooms);
+        RoomSize selectedRoomSize = showAndSelectAvailableRooms(availableRooms);
+
+        int guestNum = selectGuestNum();
+
+        showTempReservationinfo(targetMember, availableRooms, selectedRoomSize, guestNum);
     }
 
-    private static AvailableDate showAndSelectAvailableRooms(List<AvailableDate> availableRooms) {
-        availableRooms.forEach(System.out::println);
+    private static void showTempReservationinfo(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
+        System.out.println(targetMember.getName() + "님이 선택하신 예약 정보입니다.");
+        System.out.println("체크인 : " + availableRooms.get(0).getDate());
+        System.out.println("체크아웃 : " + availableRooms.get(availableRooms.size() - 1).getDate());
+        System.out.println("룸 타입 : " + selectedRoomSize);
+        System.out.println("인원 : " + guestNum);
 
-        System.out.println("원하는 객실을 선택하세요");
-        input("1. 디럭스 >> ");
+        while (true) {
+            String choice = input("예약을 확정하시겠습니까? [y/n]");
 
-        return null;
+            switch (choice.toLowerCase().charAt(0)) {
+                case 'y':
+                    Controller.confirmReservation(targetMember, availableRooms, selectedRoomSize, guestNum);
+                    break;
+                case 'n':
+                    break;
+                default:
+                    System.out.println("다시 입력해주세요");
+            }
+        }
+    }
+
+    private static int selectGuestNum() {
+
+        while (true) {
+            try {
+                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 2 ~ 4 ) : "));
+
+                if (inputNum < 0 || inputNum > 4)
+                    throw new NumberFormatException();
+
+                return inputNum;
+            } catch (NumberFormatException e) {
+                System.out.println("허용되지 않는 입력입니다.");
+            }
+        }
+    }
+
+
+    private static RoomSize showAndSelectAvailableRooms(List<AvailableDate> availableRooms) {
+
+        System.out.println(availableRooms.get(0).getDate() + "일부터 " + availableRooms.get(availableRooms.size() - 1).getDate() + "일까지 가능한 객실 수 입니다.");
+
+        Map<RoomSize, Integer> minRooms = calcMinRooms(availableRooms);
+
+        minRooms.forEach((k, v) -> {
+            System.out.print(k + ": ");
+
+            for (int i = 0; i < v; i++) {
+                System.out.print("#");
+            }
+
+            System.out.println(v + "개 남음!");
+        });
+
+        List<RoomSize> availableRoomSizeList = new ArrayList<>();
+
+        System.out.println("방 사이즈를 선택해주세요");
+        int count = 1;
+        minRooms.forEach((k, v) -> {
+            if (v > 0) {
+                availableRoomSizeList.add(k);
+                System.out.println(count + ": " + k);
+            }
+        });
+
+        while (true) {
+            try {
+                return availableRoomSizeList.get(Integer.parseInt(input(">> ")) - 1);
+            } catch (NumberFormatException e) {
+                System.out.println("숫자만 입력해 주세요");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("범위를 벗어난 숫자입니");
+            }
+        }
+    }
+
+    private static Map<RoomSize, Integer> calcMinRooms(List<AvailableDate> availableRooms) {
+
+        // 초기 value 들은 일단 10으로 만들어놓고 나중에 수정할 예정
+        Map<RoomSize, Integer> minRoomMap = new HashMap<>(Map.of(
+                RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
+                RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
+                RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
+        ));
+
+        availableRooms.stream()
+                .map(AvailableDate::getRoomVacancy)
+                .collect(Collectors.toList())
+                .forEach(m -> {
+                    m.forEach((k, v) -> {
+                        if (minRoomMap.get(k) > v)
+                            minRoomMap.put(k, v);
+                    });
+                });
+
+        return minRoomMap;
+
     }
 
     private static List<AvailableDate> searchAvailableRoomsMenu(Member member) {
