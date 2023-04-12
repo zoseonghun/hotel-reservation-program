@@ -1,16 +1,17 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Member {
+public class Member implements Serializable {
 
-    String name;
-    String phone;
-    String email;
-    Gender gender;
-    int mileage;
-    int history;
-    List<Reservation> reservationList;
+    private String name;
+    private String phone;
+    private String email;
+    private Gender gender;
+    private int mileage;
+    private int history;
+    private List<Reservation> reservationList;
 
 
     public Member() {
@@ -32,23 +33,14 @@ public class Member {
     }
 
     public double getMileageRate() {
-        double v;
+        double result;
         switch (this.history / 10) {
-            case 0:
-                v = 0.01;
-                break;
-            case 1:
-                v = 0.02;
-                break;
-            case 2:
-            case 3:
-            case 4:
-                v = 0.05;
-                break;
-            default:
-                v = 0.1;
+            case 0 : result = 0.01;
+            case 1 : result = 0.02;
+            case 2 : case 3 : case 4 : result = 0.05;
+            default : result = 0.1;
         };
-        return v;
+        return result;
     }
     public void addReservationList(Reservation reservation){
         increaseMileage((int)reservation.getCost());
