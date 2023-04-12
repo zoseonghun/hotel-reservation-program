@@ -8,8 +8,11 @@ import static common.Utility.*;
 
 public class Viewer {
 
-    private final static String PROGRAM_VERSION = "1.0.0";
+    private final static String PROGRAM_VERSION = "1.0.0"; // 프로그램 버전
 
+    /**
+     * 메인 메뉴
+     */
     public static void mainMenu() {
         while (true) {
 
@@ -45,6 +48,9 @@ public class Viewer {
         }
     }
 
+    /**
+     * 메인메뉴에서 1번 호출시 동작
+     */
     public static void makeReservation() {
         Member targetMember = searchMemberMenu();
 
@@ -54,10 +60,31 @@ public class Viewer {
 
         int guestNum = selectGuestNum();
 
-        showTempReservationinfo(targetMember, availableRooms, selectedRoomSize, guestNum);
+        showTempReservationInfo(targetMember, availableRooms, selectedRoomSize, guestNum);
     }
 
-    private static void showTempReservationinfo(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
+    /**
+     * 수정 과정에서 호출
+     * @param targetMember : 타겟 회원
+     */
+    public static void  makeReservation(Member targetMember) {
+        List<AvailableDate> availableRooms = searchAvailableRoomsMenu(targetMember);
+
+        RoomSize selectedRoomSize = showAndSelectAvailableRooms(availableRooms);
+
+        int guestNum = selectGuestNum();
+
+        showTempReservationInfo(targetMember, availableRooms, selectedRoomSize, guestNum);
+    }
+
+    /**
+     * 예약정보 출력하는 메서드
+     * @param targetMember : 회원
+     * @param availableRooms : 체크인 날짜를 담고있는 객체
+     * @param selectedRoomSize : 선택한 룸 사이즈
+     * @param guestNum : 묵을 인원
+     */
+    private static void showTempReservationInfo(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
         System.out.println(targetMember.getName() + "님이 선택하신 예약 정보입니다.");
         System.out.println("체크인 : " + availableRooms.get(0).getDate());
         System.out.println("체크아웃 : " + availableRooms.get(availableRooms.size() - 1).getDate());
@@ -79,6 +106,10 @@ public class Viewer {
         }
     }
 
+    /**
+     * 인원 선택 메뉴
+     * @return : 선택한 인원
+     */
     private static int selectGuestNum() {
 
         while (true) {
@@ -95,7 +126,11 @@ public class Viewer {
         }
     }
 
-
+    /**
+     * 선택한 일자에서 가능한 방들을 보여주고 사이즈를 선택
+     * @param availableRooms : 일자 및 방 수량을 가지고 있는 객체
+     * @return : 방 사이즈
+     */
     private static RoomSize showAndSelectAvailableRooms(List<AvailableDate> availableRooms) {
 
         System.out.println(availableRooms.get(0).getDate() + "일부터 " + availableRooms.get(availableRooms.size() - 1).getDate() + "일까지 가능한 객실 수 입니다.");
@@ -134,6 +169,11 @@ public class Viewer {
         }
     }
 
+    /**
+     * 숙박하는 일자들 중에 가능한 방 사이즈의 최솟값들을 리턴하는 메서드
+     * @param availableRooms : 숙박일자와 방 갯수를 가지고 있는 객체
+     * @return : 방 타입과 최소 수량이 짝지어진 맵
+     */
     private static Map<RoomSize, Integer> calcMinRooms(List<AvailableDate> availableRooms) {
 
         // 초기 value 들은 일단 10으로 만들어놓고 나중에 수정할 예정
@@ -157,6 +197,11 @@ public class Viewer {
 
     }
 
+    /**
+     *
+     * @param member : 회원
+     * @return
+     */
     private static List<AvailableDate> searchAvailableRoomsMenu(Member member) {
 
         System.out.println(member.getName() + "님의 예약을 진행합니다.");
