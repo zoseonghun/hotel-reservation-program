@@ -1,5 +1,3 @@
-
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
@@ -17,27 +15,28 @@ public class BoardViewer {
 
     public void getBoardList() {
         System.out.println(         "<<후기 게시판>>"       );
-        System.out.println("번호          제목            작성자          작성일 ");
-        System.out.println("=================================================================");
+        System.out.printf("%3s%14s%15s%15s%15s%15s\n", "번호","평점","제목","작성자","작성일","예약번호" );
+        System.out.println("==================================================================================================");
         if (boardList.isEmpty()) { // 게시글 객체들을 담은 리스트에 아무것도 없는 경우
             System.out.println("                       게시글 없음");
         }else {
             for(Review rv : boardList) { // 글 번호를 1번부터 시작하기 위해 인덱스 +1
-                //제목, 작성자 글자가 5자 넘어가면 3항연산자 사용 나머지 부분 ...으로 표시
-                System.out.printf("%d |%15s | %10s | %13s\n", boardList.indexOf(rv) + 1,
-                        rv.getTitle().length() > 5 ? rv.getTitle().substring(0, 5) + "..." : rv.getTitle(),
-                        rv.getWriter().length() > 5 ? rv.getWriter().substring(0, 5) + "..." : rv.getWriter(),
-                        rv.getRegistDate());
-//                System.out.printf("%d |%15s | %10s | %13s\n" ,boardList.indexOf(rv) + 1, rv.getTitle(),
-//                        rv.getWriter(), rv.getRegistDate());
+                // 제목, 작성자 글자가 5자 넘어가면 3항연산자 사용 나머지 부분 ...으로 표시
+                // 제목, 작성자 5글자 한글기준으로 맞춤
+                System.out.printf("%5s%16s%15s%15s%15s%15s\n", boardList.indexOf(rv) + 1,
+                        rv.getRate(),   // 평점
+                        rv.getTitle().length() > 5 ? rv.getTitle().substring(0, 5) + "..." : rv.getTitle(), //  제목
+                        rv.getWriter().length() > 5 ? rv.getWriter().substring(0, 5) + "..." : rv.getWriter(),  //  작성자
+                        rv.getRegistDate(), rv.getReservation()); // 작성일, 예약번호
             }
         }
-        System.out.println("=================================================================");
-        System.out.println("1. 새글작성 2. 상세보기, 3. 삭제, 4. 종료");
+        System.out.println("==================================================================================================");
+        System.out.println("1. 새글작성 2. 상세보기, 3. 삭제, 4. 목록");
     }
 
     public void boardInsert() {// 개시글 새로쓰기
         Review rv = new Review(); //게시글 객체 생성
+
 
         System.out.println("글제목(취소 : quit):"); //제목 입력
         String title = scanner.nextLine();
@@ -60,7 +59,7 @@ public class BoardViewer {
             return;
         }
 
-        rv.setNum(boardList.indexOf(rv)); // 인덱스를 객체 번호에 저장
+        rv.setNum(boardList.size()); // 인덱스를 객체 번호에 저장
         rv.setTitle(title); // 글 제목 저장
         rv.setWriter(writer); // 글 작성자 저장
         rv.setDetail(detail); // 글 내용 저장
@@ -85,74 +84,115 @@ public class BoardViewer {
         System.out.println("제목 : "+ rv.getTitle());
         System.out.println("작성자 : " + rv.getWriter());
         System.out.println("------------------------------------------------------------------------");
-        System.out.println(rv.getDetail());
-        System.out.println("------------------------------------------------------------------------");
+        System.out.println("내용 : "+rv.getDetail());
+        System.out.println("========================================================================");
 
         if (rv.getReply() != null)
-            System.out.println(rv.getReply());
+            System.out.println("댓글 : " +rv.getReply());
 
-        System.out.println("(1. 댓글 등록 2. 댓글 수정, 3. 댓글 삭제, 4. 목록) :");
-        select = Integer.parseInt(scanner.nextLine());
+        // 프로그램 종료되지 않게 try & catch 처리
+        while (true) {
+            System.out.println("(1. 댓글 등록 2. 댓글 수정, 3. 댓글 삭제, 4. 목록) :");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+                if (select < 1 || select > 4)
+                    throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("유효한 번호만 입력해주세요");
+            }
+        }
         if (select == 1) { // 현재 글 댓글 작성
             boardAddreply(rv);
         } else if (select == 2) { // 현재 글 댓글 수정
-            boardUpdate(boardList.indexOf(rv) + 1);
+            boardReplyUpdate(rv);
         } else if (select == 3) { // 현재 글 댓글 삭제
-            boardDelete(boardList.indexOf(rv) + 1);
+            boardReplyDelete(rv);
         } else if (select == 4) { // 목록으로 이동
             return;
         }
     }
 
+    // 댓글 작성
     public void boardAddreply(Review rv) {
         System.out.println("작성해주세요:");
         String comment = scanner.nextLine();
         rv.setReply(comment);
         System.out.println("추가 완료했습니다.");
+        System.out.println(rv.getNum());
+        boardDetail(rv.getNum() + 1);
     }
 
-    public void boardUpdate(int select) { // 게시글 수정
-        if (boardList.isEmpty()) { // BoardList가 비어있는 경우
-            System.out.println("게시글이 없습니다.");
+    // 댓글 수정
+    private void boardReplyUpdate(Review rv) {
+        if (rv.getReply() == null) {
+            System.out.println("등록된 댓글이 없습니다.");
             return;
         }
-
-        Review rv = new Review(); // 게시글 객체 생성
-        rv = boardList.get(select - 1); // 인덱스 = 글번호 - 1. 해당 인덱스의 객체를 가져옴
-
-        System.out.println("글제목(취소 : quit):"); // 제목 수정
-        String title = scanner.nextLine();
-        if (title.equals("quit")) {
-            System.out.println("수정이 취소되었습니다.");
-            return;
-        }
-
-        System.out.println("작성자(취소 : quit):"); // 작성자 수정
-        String writer = scanner.nextLine();
-        if (writer.equals("quit")) {
-            System.out.println("수정이 취소되었습니다.");
-            return;
-        }
-
-        System.out.println("글내용(취소 : quit): "); // 내용 수정
-        String detail = scanner.nextLine();
-        if (detail.equals("quit")) {
-            System.out.println("수정이 취소되었습니다.");
-            return;
-        }
-        // 수정 취소를 하지 않았을 경우 입력한 값을 저장
-        rv.setTitle(title);
-        rv.setWriter(writer);
-        rv.setDetail(detail);
-
-        // 등록한 현재 날짜 저장
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd(수정됨)");
-        String registDate = dateFormat.format(new Date());
-        rv.setRegistDate(registDate); // 등록 날짜를 수정 날짜로 변경
-
-        boardList.set(boardList.indexOf(rv), rv); // 해당 객체의 인덱스 위치에 rv를 저장
-        System.out.println("글이 수정되었습니다.\n");
+        System.out.println("수정할 댓글을 입력해주세요:");
+        String updatedReply = scanner.nextLine();
+        rv.setReply(updatedReply);
+        System.out.println("댓글 수정이 완료되었습니다.");
+        System.out.println(rv.getNum());
+        boardDetail(rv.getNum() + 1);
     }
+
+    // 댓글 삭제
+    private void boardReplyDelete(Review rv) {
+        if (rv.getReply() == null) {
+            System.out.println("등록된 댓글이 없습니다.");
+            return;
+        }
+        rv.setReply(null);
+        System.out.println("댓글 삭제가 완료되었습니다.");
+        System.out.println(rv.getNum());
+        boardDetail(rv.getNum() + 1);
+    }
+
+
+
+//    public void boardUpdate(int select) { // 게시글 수정
+//        if (boardList.isEmpty()) { // BoardList가 비어있는 경우
+//            System.out.println("게시글이 없습니다.");
+//            return;
+//        }
+//
+//        Review rv = new Review(); // 게시글 객체 생성
+//        rv = boardList.get(select - 1); // 인덱스 = 글번호 - 1. 해당 인덱스의 객체를 가져옴
+//
+//        System.out.println("글제목(취소 : quit):"); // 제목 수정
+//        String title = scanner.nextLine();
+//        if (title.equals("quit")) {
+//            System.out.println("수정이 취소되었습니다.");
+//            return;
+//        }
+//
+//        System.out.println("작성자(취소 : quit):"); // 작성자 수정
+//        String writer = scanner.nextLine();
+//        if (writer.equals("quit")) {
+//            System.out.println("수정이 취소되었습니다.");
+//            return;
+//        }
+//
+//        System.out.println("글내용(취소 : quit): "); // 내용 수정
+//        String detail = scanner.nextLine();
+//        if (detail.equals("quit")) {
+//            System.out.println("수정이 취소되었습니다.");
+//            return;
+//        }
+//        // 수정 취소를 하지 않았을 경우 입력한 값을 저장
+//        rv.setTitle(title);
+//        rv.setWriter(writer);
+//        rv.setDetail(detail);
+//
+//        // 등록한 현재 날짜 저장
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd(수정됨)");
+//        String registDate = dateFormat.format(new Date());
+//        rv.setRegistDate(registDate); // 등록 날짜를 수정 날짜로 변경
+//
+//        boardList.set(boardList.indexOf(rv), rv); // 해당 객체의 인덱스 위치에 rv를 저장
+//        System.out.println("글이 수정되었습니다.\n");
+//    }
 
     public void boardDelete(int select) { // 게시글 삭제
         if(boardList.isEmpty()) {

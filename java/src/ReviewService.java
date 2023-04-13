@@ -25,7 +25,7 @@ public class ReviewService {
                 System.out.println("게시판 프로그램이 종료되었습니다.");
                 break;
             } else {// 그 외의 입력을 한 경우
-                System.out.println("잘못 입력하였습니다.");
+                System.out.println("유효한 번호만 입력해주세요");
             }
         }
     }

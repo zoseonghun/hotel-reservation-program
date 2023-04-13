@@ -4,8 +4,8 @@ public class Review {
     private String title;
     private String detail;
     private String writer;
-    //    private Reservation reservation;
-//    private Rate rate;
+    private Reservation reservation;
+    private Rate rate;
     private String reply;
     private String registDate;
 
@@ -17,8 +17,8 @@ public class Review {
         this.title = title;
         this.detail = detail;
 //        this.writer = reservation.getMember();
-//        this.reservation = reservation;
-//        this.rate = rate;
+        this.reservation = reservation;
+        this.rate = rate;
         this.reply = reply;
         this.registDate = registDate;
     }
@@ -75,21 +75,21 @@ public class Review {
         this.writer = writer;
     }
 
-//    public Reservation getReservation() {
-//        return reservation;
-//    }
+    public Reservation getReservation() {
+        return reservation;
+    }
 
-//    public void setReservation(Reservation reservation) {
-//        this.reservation = reservation;
-//    }
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
 
-//    public Rate getRate() {
-//        return rate;
-//    }
+    public Rate getRate() {
+        return rate;
+    }
 
-//    public void setRate(Rate rate) {
-//        this.rate = rate;
-//    }
+    public void setRate(Rate rate) {
+        this.rate = rate;
+    }
 
     public String getReply() {
         return reply;
