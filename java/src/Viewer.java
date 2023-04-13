@@ -99,6 +99,7 @@ public class Viewer {
             switch (choice.toLowerCase().charAt(0)) {
                 case 'y':
                     Controller.confirmReservation(targetMember, availableRooms, selectedRoomSize, guestNum);
+                    pause();
                     return;
                 case 'n':
                     return;
@@ -140,7 +141,7 @@ public class Viewer {
         Map<RoomSize, Integer> minRooms = new TreeMap<>(calcMinRooms(availableRooms));
 
         minRooms.forEach((k, v) -> {
-            System.out.printf("%13s:\t", k);
+            System.out.printf("%18s:\t", k);
 
             for (int i = 0; i < v; i++) {
                 System.out.print("#");
