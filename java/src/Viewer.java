@@ -385,7 +385,4 @@ public class Viewer {
         return rsvnList;
     }
 
-    public static void main(String[] args) {
-        mainMenu();
-    }
 }
