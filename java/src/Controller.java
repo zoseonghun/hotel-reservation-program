@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static common.Utility.*;
 
 public class Controller {
@@ -15,7 +16,28 @@ public class Controller {
     }
 
     public static void loadDatabaseInFile() {
-        availableDateList = new ArrayList<>();
+        availableDateList = new ArrayList<>(List.of(
+                new AvailableDate(LocalDate.of(2023, 4, 13), new HashMap<>(Map.of(
+                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
+                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
+                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
+                ))),
+                new AvailableDate(LocalDate.of(2023, 4, 14), new HashMap<>(Map.of(
+                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
+                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
+                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
+                ))),
+                new AvailableDate(LocalDate.of(2023, 4, 15), new HashMap<>(Map.of(
+                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
+                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
+                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
+                ))),
+                new AvailableDate(LocalDate.of(2023, 4, 16), new HashMap<>(Map.of(
+                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
+                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
+                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
+                )))
+        ));
         reservationList = new ArrayList<>();
         memberList = new ArrayList<>();
         reviewList = new ArrayList<>();
@@ -27,7 +49,7 @@ public class Controller {
 
             return memberList.stream()
                     .filter(m -> m.getName().equals(name) && m.getPhone().equals(phone))
-                    .collect(Collectors.toList()).get(0);
+                    .findFirst().get();
 
         } catch (IndexOutOfBoundsException e) {
 
@@ -48,8 +70,8 @@ public class Controller {
     public static List<AvailableDate> searchAvailableRooms(LocalDate checkIn, LocalDate checkOut) {
 
         return availableDateList.stream()
-                .filter(availableDate -> availableDate.getDate().isAfter(checkIn) &&
-                        availableDate.getDate().isBefore(checkOut))
+                .filter(availableDate -> availableDate.getDate().isAfter(checkIn.minusDays(1)) &&
+                        availableDate.getDate().isBefore(checkOut.plusDays(1)))
                 .sorted(Comparator.comparing(AvailableDate::getDate))
                 .collect(Collectors.toList());
 
@@ -60,6 +82,9 @@ public class Controller {
         reduceAvailableRoom(availableRooms, selectedRoomSize);
 
         Reservation reservation = new Reservation(selectedRoomSize, targetMember, availableRooms.get(0).getDate(), availableRooms.get(availableRooms.size() - 1).getDate(), guestNum);
+
+        System.out.println("예약이 완료되었습니다.");
+        System.out.println("예약 번호 : " + reservation.hashCode());
 
         addReservation(reservation);
 
