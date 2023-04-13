@@ -15,9 +15,10 @@ public class Viewer {
      * 메인 메뉴
      */
     public static void mainMenu() {
+        firstWindow();
+
         while (true) {
 
-            System.out.println("호텔 예약 프로그램 ver : " + PROGRAM_VERSION);
             System.out.println("메뉴를 선택해 주세요");
             System.out.println("1. 새로운 예약");
             System.out.println("2. 예약 수정 / 취소");
@@ -48,6 +49,19 @@ public class Viewer {
                     System.out.println("없는 번호입니다. 다시 입력해주세요");
             }
         }
+    }
+
+    private static void firstWindow() {
+        makeLine();
+        makeSideWall();
+        makeSideWall();
+        makeSideWall();
+        System.out.printf("#%31s             #\n", "호텔 예약 프로그램 ver : " + PROGRAM_VERSION);
+        makeSideWall();
+        makeSideWall();
+        makeSideWall();
+        makeLine();
+        pause();
     }
 
     /**
@@ -141,10 +155,10 @@ public class Viewer {
         Map<RoomSize, Integer> minRooms = new TreeMap<>(calcMinRooms(availableRooms));
 
         minRooms.forEach((k, v) -> {
-            System.out.printf("%18s:\t", k);
+            System.out.printf("%-18s:\t", k);
 
             for (int i = 0; i < v; i++) {
-                System.out.print("#");
+                System.out.print("##");
             }
 
             System.out.println("\t" + v + "개");
@@ -168,7 +182,7 @@ public class Viewer {
                 return availableRoomSizeList.get(Integer.parseInt(input(">> ")) - 1);
             } catch (NumberFormatException e) {
                 System.out.println("숫자만 입력해 주세요");
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("범위를 벗어난 숫자입니");
             }
         }
@@ -385,7 +399,4 @@ public class Viewer {
         return rsvnList;
     }
 
-    public static void main(String[] args) {
-        mainMenu();
-    }
 }

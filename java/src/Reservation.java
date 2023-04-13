@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class Reservation {
+public class Reservation implements Serializable {
 
     private long reservationId;
     private RoomSize roomSize;
