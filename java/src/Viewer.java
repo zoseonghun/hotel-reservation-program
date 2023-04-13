@@ -310,11 +310,12 @@ public class Viewer {
         }
         Reservation targetRsvn = null;
         while (targetRsvn == null) {
+            int targetIndex;
             String inputIndex = input("수정 또는 삭제할 예약을 선택해주세오 >> ");
-            int targetIndex = Integer.parseInt(inputIndex) - 1;
             try {
+                targetIndex = Integer.parseInt(inputIndex) - 1;
                 targetRsvn = rsvnList.get(targetIndex);
-            } catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 System.out.println("목록에 존재하는 예약건의 번호를 입력해주세요");
             }
         }
