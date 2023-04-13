@@ -27,7 +27,7 @@ public class Controller {
 
     private static void loadAvailableDateList() {
 
-        try (FileInputStream fis = new FileInputStream("java/src/sav/availableDate.sav")) {
+        try (FileInputStream fis = new FileInputStream(ROOT_DIRECTORY + "sav/availableDate.sav")) {
 
             ObjectInputStream ois = new ObjectInputStream(fis);
 
@@ -91,7 +91,7 @@ public class Controller {
 
     private static void updateAvailableRoom() {
 
-        try (FileOutputStream fos = new FileOutputStream("java/src/sav/availableDate.sav")) {
+        try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/availableDate.sav")) {
 
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 

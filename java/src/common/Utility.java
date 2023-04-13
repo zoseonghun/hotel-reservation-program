@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 
 public class Utility {
 
+    public static final String ROOT_DIRECTORY = "java/src/";
+
     public static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public static String input(String message) {
