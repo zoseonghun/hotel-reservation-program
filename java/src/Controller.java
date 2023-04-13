@@ -14,6 +14,29 @@ public class Controller {
 
     static {
         loadDatabaseInFile();
+        loadMemberList();
+    }
+
+    public static void loadMemberList() {
+
+        try (FileInputStream fis = new FileInputStream("java/src/sav/member.sav")){;
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            memberList = (List<Member>) ois.readObject();
+        } catch (IOException e) {
+            System.out.println("멤버리스트를 불러오지 못했습니다");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("멤버리스트를 불러오지 못했습니다");
+        }
+    }
+    public static void saveMemberList() {
+        try (FileOutputStream fos = new FileOutputStream("java/src/sav/member.sav")){
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(memberList);
+        } catch (IOException e) {
+            System.out.println("멤버리스트를 저장하는데 실패하였습니다");
+            e.printStackTrace();
+        }
     }
 
     public static void loadDatabaseInFile() {
@@ -57,11 +80,12 @@ public class Controller {
     public static Member addNewMember(String name, String phone, String email, Gender gender) {
         Member newMember = new Member(name, phone, email, gender);
         memberList.add(newMember);
-
+        saveMemberList();
         System.out.println("새로운 회원을 등록했습니다.");
 
         return newMember;
     }
+
 
     public static List<AvailableDate> searchAvailableRooms(LocalDate checkIn, LocalDate checkOut) {
 
@@ -117,16 +141,18 @@ public class Controller {
                 .forEach(a -> a.reduceVacancy(selectedRoomSize));
     }
 
+    private static void increaseAvailableRoom(List<AvailableDate> availableRooms, RoomSize selectedRoomSize){
+        availableDateList.stream()
+                .filter(availableRooms::contains) // 신기한 메서드 참조 - 자동완성 썼습니다
+                .collect(Collectors.toList())
+                .forEach(a -> a.increaseVacancy(selectedRoomSize));
+    }
+
 
     //예약번호로 예약 찾기
     //Controller 예약리스트 중 예약번호 일치하는 예약 필터링 후 리스트 반환
     public static List<Reservation> searchReservation(String searchWith) {
         List<Reservation> rsvnList = null;
-//        테스트용 코드입니다
-//        Reservation rs1 = new Reservation(RoomSize.DELUXE_DOUBLE, new Member("한", "1111", "abc@gmail", Gender.FEMALE), LocalDate.now(), LocalDate.now().plusDays(2), 2);
-//        reservationList.add(rs1);
-//        System.out.println(rs1.getReservationId());
-//        List<Reservation> rsvnList = null;
         try {
             long rsvnId = Long.parseLong(searchWith);
             rsvnList = reservationList.stream()
@@ -163,8 +189,9 @@ public class Controller {
     //      -> 멤버 숙박일수, 마일리지, 멤버예약리스트에서 내역 삭제 진행
     // 예약 객체를 가지고 예약생성 메서드로 넘어갑니다.
     public static void modifyReservation(Reservation targetRsvn) {
+        List<AvailableDate> availableRooms = searchAvailableRooms(targetRsvn.getCheckIn(), targetRsvn.getCheckOut());
+        increaseAvailableRoom(availableRooms, targetRsvn.getRoomSize());
         deleteReservation(targetRsvn);
-
         Viewer.makeReservation(targetRsvn.getMember());
     }
 
