@@ -115,7 +115,7 @@ public class Viewer {
 
         while (true) {
             try {
-                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 2 ~ 4 ) : "));
+                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) : "));
 
                 if (inputNum < 0 || inputNum > 4)
                     throw new NumberFormatException();
@@ -187,12 +187,10 @@ public class Viewer {
         availableRooms.stream()
                 .map(AvailableDate::getRoomVacancy)
                 .collect(Collectors.toList())
-                .forEach(m -> {
-                    m.forEach((k, v) -> {
-                        if (minRoomMap.get(k) > v)
-                            minRoomMap.put(k, v);
-                    });
-                });
+                .forEach(m -> m.forEach((k, v) -> {
+                    if (minRoomMap.get(k) > v)
+                        minRoomMap.put(k, v);
+                }));
 
         return minRoomMap;
 
@@ -226,22 +224,20 @@ public class Viewer {
 
             StringTokenizer checkDateSt = new StringTokenizer(checkDateString, delimiter);
 
-            switch (checkDateSt.countTokens()) {
-                case 4:
-                    Queue<Integer> dateQueue = new LinkedList<>();
+            if (checkDateSt.countTokens() == 4) {
+                Queue<Integer> dateQueue = new LinkedList<>();
 
-                    try {
-                        for (int i = 0; i < 4; i++) {
-                            dateQueue.add(Integer.parseInt(checkDateSt.nextToken()));
-                        }
-                        return dateQueue;
-                    } catch (NumberFormatException e) {
-                        System.out.println("구분자를 제외하고는 숫자만 입력해 주세요");
-                        break;
+                try {
+                    for (int i = 0; i < 4; i++) {
+                        dateQueue.add(Integer.parseInt(checkDateSt.nextToken()));
                     }
-
-                default:
-                    System.out.println("입력 날짜의 수가 맞지 않습니다");
+                    return dateQueue;
+                } catch (NumberFormatException e) {
+                    System.out.println("구분자를 제외하고는 숫자만 입력해 주세요");
+                    continue;
+                }
+            } else {
+                System.out.println("입력 날짜의 수가 맞지 않습니다");
             }
         }
 
@@ -368,7 +364,6 @@ public class Viewer {
     }
 
     public static void main(String[] args) {
-        Viewer viewer = new Viewer();
-        viewer.mainMenu();
+        mainMenu();
     }
 }
