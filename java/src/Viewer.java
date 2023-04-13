@@ -23,7 +23,8 @@ public class Viewer {
             System.out.println("1. 새로운 예약");
             System.out.println("2. 예약 수정 / 취소");
             System.out.println("3. 후기 관리");
-            System.out.println("4. 프로그램 종료");
+            System.out.println("4. 고객정보 변경");
+            System.out.println("5. 프로그램 종료");
 
             switch (input(">> ")) {
                 case "1":
@@ -43,12 +44,30 @@ public class Viewer {
                 case "3":
                     ReviewService.reviewMenu();
                     break;
-                case "4":
+                case "4" :
+                    modifyMemberMenu();
+                case "5":
                     System.exit(0);
                 default:
                     System.out.println("없는 번호입니다. 다시 입력해주세요");
             }
         }
+    }
+
+    private static void modifyMemberMenu() {
+        Member targetMbr = null;
+        while(targetMbr == null) {
+            String name = input("수정할 회원의 이름을 입력하세요 >> ");
+            String phone = input("수정할 회원의 휴대폰 번호를 입력하세요 >> ");
+            targetMbr = Controller.searchMember(name, phone);
+            if (targetMbr == null) {
+                String select = input("일치하는 회원 정보가 없습니다.\n1. 회원정보 다시 입력 2. 메인메뉴로 돌아가기 >> ");
+                if(select.equals("2")){
+                    Viewer.mainMenu();
+                }
+            }
+        }
+        Controller.modifyMemberProfile(targetMbr);
     }
 
     private static void firstWindow() {

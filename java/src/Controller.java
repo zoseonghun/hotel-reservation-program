@@ -18,8 +18,7 @@ public class Controller {
     }
 
     public static void loadMemberList() {
-
-        try (FileInputStream fis = new FileInputStream("java/src/sav/member.sav")){;
+        try (FileInputStream fis = new FileInputStream(ROOT_DIRECTORY + "sav/member.sav")){;
             ObjectInputStream ois = new ObjectInputStream(fis);
             memberList = (List<Member>) ois.readObject();
         } catch (IOException e) {
@@ -30,12 +29,41 @@ public class Controller {
         }
     }
     public static void saveMemberList() {
-        try (FileOutputStream fos = new FileOutputStream("java/src/sav/member.sav")){
+        try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/member.sav")){
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(memberList);
         } catch (IOException e) {
             System.out.println("멤버리스트를 저장하는데 실패하였습니다");
             e.printStackTrace();
+        }
+    }
+
+    public static void modifyMemberProfile(Member targetMbr){
+        System.out.println(targetMbr.getName() + "님의 회원정보를 변경합니다");
+        String select = "3";
+        while(true) {
+            System.out.printf("%10s %10s\n", "1. 휴대폰번호", "2. 이메일주소");
+            select = input("수정할 정보의 번호를 선택해주세요. ( 메인메뉴로 돌아가기: 0 )\n >> ");
+            switch (select) {
+                case "1":
+                    String newNumber = input("새로운 휴대폰번호를 입력하세요. >> ");
+                    targetMbr.setPhone(newNumber);
+                    System.out.println(targetMbr + "님의 회원정보가 아래와 같이 변경되었습니다.");
+                    System.out.println(targetMbr);
+                    saveMemberList();
+                    break;
+                case "2":
+                    String newEmail = input("새로운 이메일주소를 입력하세요. >> ");
+                    targetMbr.setEmail(newEmail);
+                    System.out.println(targetMbr + "님의 회원정보가 아래와 같이 변경되었습니다.");
+                    System.out.println(targetMbr);
+                    saveMemberList();
+                    break;
+                case "0":
+                    Viewer.mainMenu();
+                default:
+                    System.out.println("수정할 정보의 번호를 선택해주세요. 0을 누르시면 메인메뉴로 돌아갑니다.");
+            }
         }
     }
 
