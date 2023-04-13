@@ -104,6 +104,13 @@ public class Controller {
                 .forEach(a -> a.reduceVacancy(selectedRoomSize));
     }
 
+    private static void increaseAvailableRoom(List<AvailableDate> availableRooms, RoomSize selectedRoomSize){
+        availableDateList.stream()
+                .filter(availableRooms::contains) // 신기한 메서드 참조 - 자동완성 썼습니다
+                .collect(Collectors.toList())
+                .forEach(a -> a.increaseVacancy(selectedRoomSize));
+    }
+
 
     //예약번호로 예약 찾기
     //Controller 예약리스트 중 예약번호 일치하는 예약 필터링 후 리스트 반환
@@ -145,8 +152,9 @@ public class Controller {
     //      -> 멤버 숙박일수, 마일리지, 멤버예약리스트에서 내역 삭제 진행
     // 예약 객체를 가지고 예약생성 메서드로 넘어갑니다.
     public static void modifyReservation(Reservation targetRsvn) {
+        List<AvailableDate> availableRooms = searchAvailableRooms(targetRsvn.getCheckIn(), targetRsvn.getCheckOut());
+        increaseAvailableRoom(availableRooms, targetRsvn.getRoomSize());
         deleteReservation(targetRsvn);
-
         Viewer.makeReservation(targetRsvn.getMember());
     }
 

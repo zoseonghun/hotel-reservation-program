@@ -47,12 +47,12 @@ public class Reservation {
     @Override
     public String toString() {
         return  "예약자명: " + member.getName() +
-                "/t 객입타입: " + roomSize +
-                "/t 체크인: " + checkIn +
-                "/t 체크아웃: " + checkOut +
-                "/t 투숙인원: " + guestNum +
-                "/t 객실요금: " + cost +
-                "/t 예약번호: " + reservationId;
+                "\t 객입타입: " + roomSize +
+                "\t 체크인: " + checkIn +
+                "\t 체크아웃: " + checkOut +
+                "\t 투숙인원: " + guestNum +
+                "\t 객실요금: " + cost +
+                "\t 예약번호: " + reservationId;
     }
 
     @Override
