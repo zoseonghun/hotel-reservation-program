@@ -40,31 +40,26 @@ public class Controller {
     }
 
     public static void loadDatabaseInFile() {
-        availableDateList = new ArrayList<>(List.of(
-                new AvailableDate(LocalDate.of(2023, 4, 13), new HashMap<>(Map.of(
-                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
-                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
-                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
-                ))),
-                new AvailableDate(LocalDate.of(2023, 4, 14), new HashMap<>(Map.of(
-                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
-                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
-                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
-                ))),
-                new AvailableDate(LocalDate.of(2023, 4, 15), new HashMap<>(Map.of(
-                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
-                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
-                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
-                ))),
-                new AvailableDate(LocalDate.of(2023, 4, 16), new HashMap<>(Map.of(
-                        RoomSize.DELUXE_DOUBLE, 10, RoomSize.DELUXE_TWIN, 10,
-                        RoomSize.BOUTIQUE_KING, 10, RoomSize.JR_SUITE, 10,
-                        RoomSize.SUITE, 10, RoomSize.PRESIDENTIAL_SUITE, 10
-                )))
-        ));
+
+        loadAvailableDateList();
+
         reservationList = new ArrayList<>();
         memberList = new ArrayList<>();
         reviewList = new ArrayList<>();
+    }
+
+    private static void loadAvailableDateList() {
+
+        try (FileInputStream fis = new FileInputStream("java/src/sav/availableDate.sav")) {
+
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            availableDateList = (List<AvailableDate>) ois.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("데이터 로드 오류 발생");
+        }
+
     }
 
     public static Member searchMember(String name, String phone) {
@@ -114,6 +109,22 @@ public class Controller {
 
         addReservation(reservation);
 
+        updateAvailableRoom();
+
+    }
+
+    private static void updateAvailableRoom() {
+
+        try (FileOutputStream fos = new FileOutputStream("java/src/sav/availableDate.sav")) {
+
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(availableDateList);
+
+        } catch (IOException e) {
+            System.out.println("파일 저장 오류 발생!!");
+        }
+
     }
 
     private static void addReservation(Reservation reservation) {
@@ -147,7 +158,7 @@ public class Controller {
             rsvnList = reservationList.stream()
                     .filter(r -> r.getReservationId() == rsvnId)
                     .collect(Collectors.toList());
-            if(rsvnList.size() == 0) {
+            if (rsvnList.size() == 0) {
                 System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
                 pause();
                 Viewer.mainMenu();
@@ -164,7 +175,7 @@ public class Controller {
     //멤버객체가 가지고 있는 리스트 반환
     public static List<Reservation> searchReservation(Member mbr) {
         List<Reservation> rsvnList = mbr.getReservationList();
-        if(rsvnList.size() == 0) {
+        if (rsvnList.size() == 0) {
             System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
             pause();
             Viewer.mainMenu();
