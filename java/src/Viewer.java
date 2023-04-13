@@ -369,7 +369,6 @@ public class Viewer {
     }
 
     public static void main(String[] args) {
-        Viewer viewer = new Viewer();
-        viewer.mainMenu();
+        mainMenu();
     }
 }

@@ -136,7 +136,6 @@ public class Member implements Serializable {
                 ", gender=" + gender +
                 ", mileage=" + mileage +
                 ", history=" + history +
-                ", reservationList=" + reservationList +
                 '}';
     }
 }
