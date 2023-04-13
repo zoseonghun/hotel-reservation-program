@@ -109,11 +109,6 @@ public class Controller {
     //Controller 예약리스트 중 예약번호 일치하는 예약 필터링 후 리스트 반환
     public static List<Reservation> searchReservation(String searchWith) {
         List<Reservation> rsvnList = null;
-//        테스트용 코드입니다
-//        Reservation rs1 = new Reservation(RoomSize.DELUXE_DOUBLE, new Member("한", "1111", "abc@gmail", Gender.FEMALE), LocalDate.now(), LocalDate.now().plusDays(2), 2);
-//        reservationList.add(rs1);
-//        System.out.println(rs1.getReservationId());
-//        List<Reservation> rsvnList = null;
         try {
             int rsvnId = Integer.parseInt(searchWith);
             rsvnList = reservationList.stream()

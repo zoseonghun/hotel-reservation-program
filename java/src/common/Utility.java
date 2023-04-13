@@ -15,9 +15,6 @@ public class Utility {
             try {
                 String inputText = br.readLine();
 
-                if (inputText.equals(""))
-                    throw new IOException();
-
                 return inputText;
             } catch (IOException e) {
                 System.out.println("입력 오류 발생! 다시 입력해주세요");
