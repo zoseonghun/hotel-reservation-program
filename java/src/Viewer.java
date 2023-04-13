@@ -266,7 +266,7 @@ public class Viewer {
         Gender inputGender = inputGenderMenu();
         String inputEmail = null;
         while (true) {
-            inputEmail = input("email 을 입력해 주세요");
+            inputEmail = input("email 을 입력해 주세요 >> ");
 
             // 유효성 검사
             if (!inputEmail.equals(""))
