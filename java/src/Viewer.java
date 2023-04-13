@@ -141,10 +141,10 @@ public class Viewer {
         Map<RoomSize, Integer> minRooms = new TreeMap<>(calcMinRooms(availableRooms));
 
         minRooms.forEach((k, v) -> {
-            System.out.printf("%18s:\t", k);
+            System.out.printf("%-18s:\t", k);
 
             for (int i = 0; i < v; i++) {
-                System.out.print("#");
+                System.out.print("# ");
             }
 
             System.out.println("\t" + v + "개");
@@ -168,7 +168,7 @@ public class Viewer {
                 return availableRoomSizeList.get(Integer.parseInt(input(">> ")) - 1);
             } catch (NumberFormatException e) {
                 System.out.println("숫자만 입력해 주세요");
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("범위를 벗어난 숫자입니");
             }
         }
