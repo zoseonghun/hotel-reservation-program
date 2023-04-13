@@ -122,6 +122,7 @@ public class Controller {
         } catch (NumberFormatException | NullPointerException e) {
             System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
             pause();
+            Viewer.mainMenu();
         }
         return rsvnList;
     }
@@ -129,7 +130,14 @@ public class Controller {
     //멤버객체로 예약 찾기
     //멤버객체가 가지고 있는 리스트 반환
     public static List<Reservation> searchReservation(Member mbr) {
-        return mbr.getReservationList();
+        List<Reservation> rsvnList = reservationList;
+        if(rsvnList.size() == 0) {
+            System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
+            pause();
+            Viewer.mainMenu();
+
+        }
+        return rsvnList;
     }
 
     //예약 수정하기 선택시
