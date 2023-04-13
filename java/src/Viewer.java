@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static common.Utility.input;
@@ -97,9 +98,9 @@ public class Viewer {
             switch (choice.toLowerCase().charAt(0)) {
                 case 'y':
                     Controller.confirmReservation(targetMember, availableRooms, selectedRoomSize, guestNum);
-                    break;
+                    return;
                 case 'n':
-                    break;
+                    return;
                 default:
                     System.out.println("다시 입력해주세요");
             }
@@ -150,11 +151,11 @@ public class Viewer {
         List<RoomSize> availableRoomSizeList = new ArrayList<>();
 
         System.out.println("방 사이즈를 선택해주세요");
-        int count = 1;
+        AtomicInteger count = new AtomicInteger(1);
         minRooms.forEach((k, v) -> {
             if (v > 0) {
                 availableRoomSizeList.add(k);
-                System.out.println(count + ": " + k);
+                System.out.println(count.getAndIncrement() + ": " + k);
             }
         });
 
@@ -250,8 +251,6 @@ public class Viewer {
         System.out.println("회원을 검색합니다.");
         String inputName = input("이름을 입력해주세요 >> ");
         String inputPhone = input("전화번호를 입력해주세요 >> ");
-
-        System.out.println(inputName + inputPhone);
 
         Member member = Controller.searchMember(inputName, inputPhone);
 
