@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static common.Utility.ROOT_DIRECTORY;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -19,7 +21,7 @@ public class Main {
      * 초기 데이터베이스 저장용 메서드 오늘부터 30일 까지의 객체를 생성한다.
      */
     private static void saveAvailableDate() {
-        try (FileOutputStream fos = new FileOutputStream("java/src/sav/availableDate.sav")) {
+        try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/availableDate.sav")) {
 
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
@@ -42,7 +44,7 @@ public class Main {
 
     private static void saveMember() {
 
-        try (FileOutputStream fos = new FileOutputStream("java/src/sav/member.sav")) {
+        try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/member.sav")) {
 
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
