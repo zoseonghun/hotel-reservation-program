@@ -119,6 +119,11 @@ public class Controller {
             rsvnList = reservationList.stream()
                     .filter(r -> r.getReservationId() == rsvnId)
                     .collect(Collectors.toList());
+            if(rsvnList.size() == 0) {
+                System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
+                pause();
+                Viewer.mainMenu();
+            }
         } catch (NumberFormatException | NullPointerException e) {
             System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
             pause();
