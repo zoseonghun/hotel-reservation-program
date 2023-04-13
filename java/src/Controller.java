@@ -49,7 +49,7 @@ public class Controller {
 
             return memberList.stream()
                     .filter(m -> m.getName().equals(name) && m.getPhone().equals(phone))
-                    .findFirst().orElseGet(() -> null);
+                    .findFirst().orElse(null);
 
         } catch (IndexOutOfBoundsException e) {
 
@@ -146,8 +146,8 @@ public class Controller {
     // 예약 객체를 가지고 예약생성 메서드로 넘어갑니다.
     public static void modifyReservation(Reservation targetRsvn) {
         deleteReservation(targetRsvn);
-        Viewer viewer = new Viewer();
-        viewer.makeReservation(targetRsvn.getMember());
+
+        Viewer.makeReservation(targetRsvn.getMember());
     }
 
     //예약삭제 메서드
