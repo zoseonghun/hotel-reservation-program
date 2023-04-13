@@ -9,13 +9,19 @@ public class Utility {
     public static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public static String input(String message) {
-        System.out.print(message);
 
-        try {
-            return br.readLine();
-        } catch (IOException e) {
-            System.out.println("입력 오류 발생!");
-            return "";
+        while (true) {
+            System.out.print(message);
+            try {
+                String inputText = br.readLine();
+
+                if (inputText.equals(""))
+                    throw new IOException();
+
+                return inputText;
+            } catch (IOException e) {
+                System.out.println("입력 오류 발생! 다시 입력해주세요");
+            }
         }
 
     }
