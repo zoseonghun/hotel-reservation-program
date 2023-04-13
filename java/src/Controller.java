@@ -85,6 +85,7 @@ public class Controller {
 
         System.out.println("예약이 완료되었습니다.");
         System.out.println("예약 번호 : " + reservation.hashCode());
+        System.out.println("가격 : " + reservation.getCost() + "만원");
 
         addReservation(reservation);
 
@@ -117,7 +118,7 @@ public class Controller {
     public static List<Reservation> searchReservation(String searchWith) {
         List<Reservation> rsvnList = null;
         try {
-            int rsvnId = Integer.parseInt(searchWith);
+            long rsvnId = Long.parseLong(searchWith);
             rsvnList = reservationList.stream()
                     .filter(r -> r.getReservationId() == rsvnId)
                     .collect(Collectors.toList());

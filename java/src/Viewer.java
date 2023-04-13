@@ -94,11 +94,12 @@ public class Viewer {
         System.out.println("인원 : " + guestNum);
 
         while (true) {
-            String choice = input("예약을 확정하시겠습니까? [y/n]");
+            String choice = input("예약을 확정하시겠습니까? [y/n] >> ");
 
             switch (choice.toLowerCase().charAt(0)) {
                 case 'y':
                     Controller.confirmReservation(targetMember, availableRooms, selectedRoomSize, guestNum);
+                    pause();
                     return;
                 case 'n':
                     return;
@@ -116,7 +117,7 @@ public class Viewer {
 
         while (true) {
             try {
-                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) : "));
+                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) >> "));
 
                 if (inputNum < 0 || inputNum > 4)
                     throw new NumberFormatException();
@@ -137,17 +138,19 @@ public class Viewer {
 
         System.out.println(availableRooms.get(0).getDate() + "일부터 " + availableRooms.get(availableRooms.size() - 1).getDate() + "일까지 가능한 객실 수 입니다.");
 
-        Map<RoomSize, Integer> minRooms = calcMinRooms(availableRooms);
+        Map<RoomSize, Integer> minRooms = new TreeMap<>(calcMinRooms(availableRooms));
 
         minRooms.forEach((k, v) -> {
-            System.out.print(k + ": ");
+            System.out.printf("%18s:\t", k);
 
             for (int i = 0; i < v; i++) {
                 System.out.print("#");
             }
 
-            System.out.println(v + "개 남음!");
+            System.out.println("\t" + v + "개");
         });
+
+        pause();
 
         List<RoomSize> availableRoomSizeList = new ArrayList<>();
 
@@ -235,7 +238,6 @@ public class Viewer {
                     return dateQueue;
                 } catch (NumberFormatException e) {
                     System.out.println("구분자를 제외하고는 숫자만 입력해 주세요");
-                    continue;
                 }
             } else {
                 System.out.println("입력 날짜의 수가 맞지 않습니다");
@@ -263,14 +265,32 @@ public class Viewer {
         System.out.println("존재하지 않는 회원입니다.");
         System.out.println("새 회원을 등록합니다.");
         Gender inputGender = inputGenderMenu();
-        String inputEmail = input("email 을 입력해 주세요");
+        String inputEmail = null;
+        while (true) {
+            inputEmail = input("email 을 입력해 주세요 >> ");
+
+            // 유효성 검사
+            if (!inputEmail.equals(""))
+                break;
+
+            System.out.println("올바르지 않은 입력입니다.");
+        }
 
         return Controller.addNewMember(inputName, inputPhone, inputEmail, inputGender);
     }
 
     private static Gender inputGenderMenu() {
         while (true) {
-            switch (input("성별을 입력해주세요 [f/m] >> ").toLowerCase().charAt(0)) {
+            char genderInput;
+
+            // 빈칸 입력시
+            try {
+                genderInput = input("성별을 입력해주세요 [f/m] >> ").toLowerCase().charAt(0);
+            } catch (IndexOutOfBoundsException e) {
+                genderInput = ' ';
+            }
+
+            switch (genderInput) {
                 case 'f':
                     return Gender.FEMALE;
                 case 'm':
