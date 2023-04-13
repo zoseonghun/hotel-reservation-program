@@ -43,9 +43,25 @@ public class Controller {
 
         loadAvailableDateList();
 
-        reservationList = new ArrayList<>();
+        loadReservationList();
+
         memberList = new ArrayList<>();
         reviewList = new ArrayList<>();
+    }
+
+    private static void loadReservationList() {
+
+        try (FileInputStream fis = new FileInputStream(ROOT_DIRECTORY + "sav/reservation.sav")) {
+
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            reservationList = (List<Reservation>) ois.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("세이브 파일을 로드하지 못했습니다. 빈 세이브 파일로 진행합니다.");
+            reservationList = new ArrayList<>();
+        }
+
     }
 
     private static void loadAvailableDateList() {
@@ -58,6 +74,8 @@ public class Controller {
 
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("데이터 로드 오류 발생");
+            System.out.println("세이브 파일들이 존재하는지 다시 확인하세요");
+            System.exit(1);
         }
 
     }
@@ -110,6 +128,21 @@ public class Controller {
         addReservation(reservation);
 
         updateAvailableRoom();
+        updateReservation();
+
+    }
+
+    private static void updateReservation() {
+
+        try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/reservation.sav")) {
+
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(reservationList);
+
+        } catch (IOException e) {
+            System.out.println("파일 저장에 실패했습니다.");
+        }
 
     }
 
@@ -202,5 +235,7 @@ public class Controller {
         targetMbr.removeReservationList(targetRsvn);
         reservationList.remove(targetRsvn);
 
+        updateReservation();
+        updateAvailableRoom();
     }
 }
