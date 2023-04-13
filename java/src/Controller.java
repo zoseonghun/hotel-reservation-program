@@ -14,7 +14,6 @@ public class Controller {
 
     static {
         loadDatabaseInFile();
-        loadMemberList();
     }
 
     public static void loadMemberList() {
@@ -73,7 +72,8 @@ public class Controller {
 
         loadReservationList();
 
-        memberList = new ArrayList<>();
+        loadMemberList();
+
         reviewList = new ArrayList<>();
     }
 
@@ -86,7 +86,6 @@ public class Controller {
             reservationList = (List<Reservation>) ois.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("세이브 파일을 로드하지 못했습니다. 빈 세이브 파일로 진행합니다.");
             reservationList = new ArrayList<>();
         }
 
@@ -144,20 +143,16 @@ public class Controller {
     }
 
 
-    public static void confirmReservation(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
-        reduceAvailableRoom(availableRooms, selectedRoomSize);
-
-        Reservation reservation = new Reservation(selectedRoomSize, targetMember, availableRooms.get(0).getDate(), availableRooms.get(availableRooms.size() - 1).getDate(), guestNum);
+    public static void confirmReservation(Reservation reservation, List<AvailableDate> availableRooms) {
+        reduceAvailableRoom(availableRooms, reservation.getRoomSize());
 
         System.out.println("예약이 완료되었습니다.");
-        System.out.println("예약 번호 : " + reservation.getReservationId());
-        System.out.println("가격 : " + reservation.getCost() + "만원");
+        System.out.println(reservation);
 
         addReservation(reservation);
 
         updateAvailableRoom();
         updateReservation();
-
     }
 
     private static void updateReservation() {
@@ -215,9 +210,8 @@ public class Controller {
     public static List<Reservation> searchReservation(String searchWith) {
         List<Reservation> rsvnList = null;
         try {
-            long rsvnId = Long.parseLong(searchWith);
             rsvnList = reservationList.stream()
-                    .filter(r -> r.getReservationId() == rsvnId)
+                    .filter(r -> r.getReservationId().equals(searchWith))
                     .collect(Collectors.toList());
             if (rsvnList.size() == 0) {
                 System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
@@ -250,18 +244,19 @@ public class Controller {
     //      -> 멤버 숙박일수, 마일리지, 멤버예약리스트에서 내역 삭제 진행
     // 예약 객체를 가지고 예약생성 메서드로 넘어갑니다.
     public static void modifyReservation(Reservation targetRsvn) {
-        List<AvailableDate> availableRooms = searchAvailableRooms(targetRsvn.getCheckIn(), targetRsvn.getCheckOut());
-        increaseAvailableRoom(availableRooms, targetRsvn.getRoomSize());
         deleteReservation(targetRsvn);
         Viewer.makeReservation(targetRsvn.getMember());
+
     }
 
     //예약삭제 메서드
     //      -> 멤버 숙박일수, 마일리지, 멤버예약리스트에서 내역 삭제
     public static void deleteReservation(Reservation targetRsvn) {
+        List<AvailableDate> availableRooms = searchAvailableRooms(targetRsvn.getCheckIn(), targetRsvn.getCheckOut());
         Member targetMbr = targetRsvn.getMember();
         targetMbr.removeReservationList(targetRsvn);
         reservationList.remove(targetRsvn);
+        increaseAvailableRoom(availableRooms, targetRsvn.getRoomSize());
 
         updateReservation();
         updateAvailableRoom();
