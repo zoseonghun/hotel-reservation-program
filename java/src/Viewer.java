@@ -142,6 +142,7 @@ public class Viewer {
         }
     }
 
+
     /**
      * 인원 선택 메뉴
      * @return : 선택한 인원

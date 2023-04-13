@@ -2,7 +2,6 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static common.Utility.ROOT_DIRECTORY;
@@ -11,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        saveAvailableDate();
+//        resetAvailableDate();
 
         Viewer.mainMenu();
 
@@ -19,8 +18,9 @@ public class Main {
 
     /**
      * 초기 데이터베이스 저장용 메서드 오늘부터 30일 까지의 객체를 생성한다.
+     * 정보를 한번에 초기화 시키고 싶을 때 사용하자~~~~~~~~~~~~
      */
-    private static void saveAvailableDate() {
+    private static void resetAvailableDate() {
         try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/availableDate.sav")) {
 
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -42,17 +42,4 @@ public class Main {
         }
     }
 
-    private static void saveMember() {
-
-        try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/member.sav")) {
-
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 }

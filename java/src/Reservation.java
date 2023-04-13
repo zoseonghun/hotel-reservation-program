@@ -22,7 +22,7 @@ public class Reservation implements Serializable {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.guestNum = guestNum;
-        this.reservationId = hashCode() + Integer.MAX_VALUE + 2;
+        this.reservationId = hashCode() + Integer.MAX_VALUE * 100L + 2;
         calcCost();
     }
 
