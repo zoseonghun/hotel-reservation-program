@@ -40,6 +40,7 @@ public class Viewer {
                     modifyOrDelete(targetRsvn);
                     break;
                 case "3":
+                    ReviewService.reviewMenu();
                     break;
                 case "4":
                     System.exit(0);

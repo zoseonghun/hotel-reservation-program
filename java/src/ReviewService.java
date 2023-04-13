@@ -1,7 +1,8 @@
 import java.util.Scanner;
 
 public class ReviewService {
-    public static void main(String[] args) {
+
+    public static void reviewMenu() {
         Scanner scanner = new Scanner(System.in); // 입력 받는 객체
         BoardViewer dao = new BoardViewer(); // 게시판 접근 객체
 
@@ -21,12 +22,11 @@ public class ReviewService {
                 int select = Integer.parseInt(scanner.nextLine());
                 dao.boardDelete(select); // 선택한 글 삭제
             } else if (answer == 4) {// 종료
+                System.out.println("게시판 프로그램이 종료되었습니다.");
                 break;
             } else {// 그 외의 입력을 한 경우
                 System.out.println("잘못 입력하였습니다.");
             }
         }
-
-        System.out.println("게시판 프로그램이 종료되었습니다.");
     }
 }
