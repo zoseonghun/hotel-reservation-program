@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Reservation {
 
-    private int reservationId;
+    private long reservationId;
     private RoomSize roomSize;
     private Member member;
     private LocalDate checkIn;
@@ -21,26 +21,38 @@ public class Reservation {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.guestNum = guestNum;
-        this.reservationId = hashCode();
+        this.reservationId = hashCode() + Integer.MAX_VALUE + 2;
+        calcCost();
     }
 
     private void calcCost() {
-        int dolorPerDay = 0;
+        int wonPerDay = 0;
         switch (this.roomSize) {
             case DELUXE_DOUBLE:
             case DELUXE_TWIN:
-                dolorPerDay = 20;
+                wonPerDay = 20;
             case BOUTIQUE_KING:
-                dolorPerDay = 30;
+                wonPerDay = 30;
             case JR_SUITE:
-                dolorPerDay = 40;
+                wonPerDay = 40;
             case SUITE:
-                dolorPerDay = 50;
+                wonPerDay = 50;
             case PRESIDENTIAL_SUITE:
-                dolorPerDay = 60;
-        };
+                wonPerDay = 60;
+        }
 
-        this.cost = dolorPerDay * ChronoUnit.DAYS.between(this.checkIn, this.checkOut);
+        int additionalCost = 0;
+
+        switch (this.guestNum) {
+            case 3:
+                additionalCost = 2;
+                break;
+            case 4:
+                additionalCost = 4;
+                break;
+        }
+
+        this.cost = wonPerDay * ChronoUnit.DAYS.between(this.checkIn, this.checkOut) + additionalCost;
 
     }
 
@@ -70,7 +82,7 @@ public class Reservation {
         return Objects.hash(member, checkIn, checkOut, guestNum, cost);
     }
 
-    public int getReservationId() {
+    public long getReservationId() {
         return reservationId;
     }
 

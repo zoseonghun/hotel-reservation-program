@@ -13,12 +13,7 @@ public class Utility {
         while (true) {
             System.out.print(message);
             try {
-                String inputText = br.readLine();
-
-                if (inputText.equals(""))
-                    throw new IOException();
-
-                return inputText;
+                return br.readLine();
             } catch (IOException e) {
                 System.out.println("입력 오류 발생! 다시 입력해주세요");
             }

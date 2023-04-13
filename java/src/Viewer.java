@@ -235,7 +235,6 @@ public class Viewer {
                     return dateQueue;
                 } catch (NumberFormatException e) {
                     System.out.println("구분자를 제외하고는 숫자만 입력해 주세요");
-                    continue;
                 }
             } else {
                 System.out.println("입력 날짜의 수가 맞지 않습니다");
@@ -270,7 +269,16 @@ public class Viewer {
 
     private static Gender inputGenderMenu() {
         while (true) {
-            switch (input("성별을 입력해주세요 [f/m] >> ").toLowerCase().charAt(0)) {
+            char genderInput;
+
+            // 빈칸 입력시
+            try {
+                genderInput = input("성별을 입력해주세요 [f/m] >> ").toLowerCase().charAt(0);
+            } catch (IndexOutOfBoundsException e) {
+                genderInput = ' ';
+            }
+
+            switch (genderInput) {
                 case 'f':
                     return Gender.FEMALE;
                 case 'm':
