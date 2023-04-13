@@ -108,13 +108,12 @@ public class Controller {
     //예약번호로 예약 찾기
     //Controller 예약리스트 중 예약번호 일치하는 예약 필터링 후 리스트 반환
     public static List<Reservation> searchReservation(String searchWith) {
-//        List<Reservation> rsvnList = reservationList;
+        List<Reservation> rsvnList = null;
 //        테스트용 코드입니다
 //        Reservation rs1 = new Reservation(RoomSize.DELUXE_DOUBLE, new Member("한", "1111", "abc@gmail", Gender.FEMALE), LocalDate.now(), LocalDate.now().plusDays(2), 2);
 //        reservationList.add(rs1);
 //        System.out.println(rs1.getReservationId());
 //        List<Reservation> rsvnList = null;
-        List<Reservation> rsvnList = new ArrayList<>();
         try {
             int rsvnId = Integer.parseInt(searchWith);
             rsvnList = reservationList.stream()
@@ -131,7 +130,7 @@ public class Controller {
     //멤버객체로 예약 찾기
     //멤버객체가 가지고 있는 리스트 반환
     public static List<Reservation> searchReservation(Member mbr) {
-        List<Reservation> rsvnList = reservationList;
+        List<Reservation> rsvnList = mbr.getReservationList();
         if(rsvnList.size() == 0) {
             System.out.println("입력하신 정보와 일치하는 예약이 없습니다");
             pause();

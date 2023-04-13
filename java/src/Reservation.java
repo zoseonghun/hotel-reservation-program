@@ -67,7 +67,7 @@ public class Reservation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(member, checkIn, checkOut);
+        return Objects.hash(member, checkIn, checkOut, guestNum, cost);
     }
 
     public int getReservationId() {
