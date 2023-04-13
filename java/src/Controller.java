@@ -115,7 +115,7 @@ public class Controller {
 //        System.out.println(rs1.getReservationId());
 //        List<Reservation> rsvnList = null;
         try {
-            int rsvnId = Integer.parseInt(searchWith);
+            long rsvnId = Long.parseLong(searchWith);
             rsvnList = reservationList.stream()
                     .filter(r -> r.getReservationId() == rsvnId)
                     .collect(Collectors.toList());
