@@ -49,7 +49,7 @@ public class Controller {
 
             return memberList.stream()
                     .filter(m -> m.getName().equals(name) && m.getPhone().equals(phone))
-                    .findFirst().get();
+                    .findFirst().orElseGet(() -> null);
 
         } catch (IndexOutOfBoundsException e) {
 
