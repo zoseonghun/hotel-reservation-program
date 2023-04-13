@@ -51,7 +51,7 @@ public class Reservation {
                 additionalCost = 4;
                 break;
         }
-        
+
         this.cost = wonPerDay * ChronoUnit.DAYS.between(this.checkIn, this.checkOut) + additionalCost;
 
     }
