@@ -116,7 +116,7 @@ public class Viewer {
 
         while (true) {
             try {
-                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) : "));
+                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) >> "));
 
                 if (inputNum < 0 || inputNum > 4)
                     throw new NumberFormatException();
