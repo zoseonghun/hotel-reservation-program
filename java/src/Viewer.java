@@ -144,7 +144,7 @@ public class Viewer {
             System.out.printf("%-18s:\t", k);
 
             for (int i = 0; i < v; i++) {
-                System.out.print("# ");
+                System.out.print("##");
             }
 
             System.out.println("\t" + v + "개");
