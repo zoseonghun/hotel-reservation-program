@@ -3,8 +3,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static common.Utility.input;
-import java.util.List;
 import static common.Utility.*;
 
 public class Viewer {
@@ -121,17 +119,26 @@ public class Viewer {
      */
     private static void showTempReservationInfo(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
         System.out.println(targetMember.getName() + "님이 선택하신 예약 정보입니다.");
-        System.out.println("체크인 : " + availableRooms.get(0).getDate());
-        System.out.println("체크아웃 : " + availableRooms.get(availableRooms.size() - 1).getDate());
+
+        LocalDate checkIn = availableRooms.get(0).getDate();
+        System.out.println("체크인 : " + checkIn);
+
+        LocalDate checkOut = availableRooms.get(availableRooms.size() - 1).getDate();
+        System.out.println("체크아웃 : " + checkOut);
+
         System.out.println("룸 타입 : " + selectedRoomSize);
         System.out.println("인원 : " + guestNum);
+        Reservation reservation = new Reservation(selectedRoomSize, targetMember, checkIn, checkOut, guestNum);
+
+        System.out.println("가격 : " + reservation.getCost() + " 만원");
+
 
         while (true) {
             String choice = input("예약을 확정하시겠습니까? [y/n] >> ");
 
             switch (choice.toLowerCase().charAt(0)) {
                 case 'y':
-                    Controller.confirmReservation(targetMember, availableRooms, selectedRoomSize, guestNum);
+                    Controller.confirmReservation(reservation, availableRooms);
                     pause();
                     return;
                 case 'n':
@@ -237,23 +244,21 @@ public class Viewer {
     /**
      *
      * @param member : 회원
-     * @return
+     * @return : 선택한 일자 내의 AvailableDate 리스트
      */
     private static List<AvailableDate> searchAvailableRoomsMenu(Member member) {
 
         System.out.println(member.getName() + "님의 예약을 진행합니다.");
 
-        Queue<Integer> checkQ = inputDateMenu();
+        Queue<LocalDate> checkQ = inputDateMenu();
 
-        int thisYear = LocalDate.now().getYear();
-
-        LocalDate checkIn = LocalDate.of(thisYear, checkQ.poll(), checkQ.poll());
-        LocalDate checkOut = LocalDate.of(thisYear, checkQ.poll(), checkQ.poll());
+        LocalDate checkIn = checkQ.poll();
+        LocalDate checkOut = checkQ.poll();
 
         return Controller.searchAvailableRooms(checkIn, checkOut);
     }
 
-    private static Queue<Integer> inputDateMenu() {
+    private static Queue<LocalDate> inputDateMenu() {
         // 날짜 구분자
         String delimiter = "/- ";
 
@@ -263,15 +268,31 @@ public class Viewer {
             StringTokenizer checkDateSt = new StringTokenizer(checkDateString, delimiter);
 
             if (checkDateSt.countTokens() == 4) {
-                Queue<Integer> dateQueue = new LinkedList<>();
+                Queue<LocalDate> dateQueue = new LinkedList<>();
 
                 try {
-                    for (int i = 0; i < 4; i++) {
-                        dateQueue.add(Integer.parseInt(checkDateSt.nextToken()));
-                    }
+
+                    int thisYear = LocalDate.now().getYear();
+
+                    LocalDate checkIn = LocalDate.of(thisYear,
+                            Integer.parseInt(checkDateSt.nextToken()),
+                            Integer.parseInt(checkDateSt.nextToken()));
+                    LocalDate checkOut = LocalDate.of(thisYear,
+                            Integer.parseInt(checkDateSt.nextToken()),
+                            Integer.parseInt(checkDateSt.nextToken()));
+
+                    if (checkIn.isAfter(checkOut))
+                        throw new Exception();
+
+                    dateQueue.add(checkIn);
+                    dateQueue.add(checkOut);
+
                     return dateQueue;
+
                 } catch (NumberFormatException e) {
                     System.out.println("구분자를 제외하고는 숫자만 입력해 주세요");
+                } catch (Exception e) {
+                    System.out.println("체크인 날짜가 체크아웃 날짜보다 앞서야 합니다.");
                 }
             } else {
                 System.out.println("입력 날짜의 수가 맞지 않습니다");
