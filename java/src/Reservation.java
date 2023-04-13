@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class Reservation {
+public class Reservation implements Serializable {
 
     private long reservationId;
     private RoomSize roomSize;
@@ -64,7 +65,7 @@ public class Reservation {
                 "\t 체크아웃: " + checkOut +
                 "\t 투숙인원: " + guestNum +
                 "\t 객실요금: " + cost +
-                "\t 예약번호: " + reservationId;
+                "\t 예약번호: " + hashCode();
     }
 
     @Override

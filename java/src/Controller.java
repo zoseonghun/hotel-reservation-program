@@ -1,3 +1,4 @@
+import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,6 +14,29 @@ public class Controller {
 
     static {
         loadDatabaseInFile();
+        loadMemberList();
+    }
+
+    public static void loadMemberList() {
+
+        try (FileInputStream fis = new FileInputStream("java/src/sav/member.sav")){;
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            memberList = (List<Member>) ois.readObject();
+        } catch (IOException e) {
+            System.out.println("멤버리스트를 불러오지 못했습니다");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("멤버리스트를 불러오지 못했습니다");
+        }
+    }
+    public static void saveMemberList() {
+        try (FileOutputStream fos = new FileOutputStream("java/src/sav/member.sav")){
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(memberList);
+        } catch (IOException e) {
+            System.out.println("멤버리스트를 저장하는데 실패하였습니다");
+            e.printStackTrace();
+        }
     }
 
     public static void loadDatabaseInFile() {
@@ -61,11 +85,12 @@ public class Controller {
     public static Member addNewMember(String name, String phone, String email, Gender gender) {
         Member newMember = new Member(name, phone, email, gender);
         memberList.add(newMember);
-
+        saveMemberList();
         System.out.println("새로운 회원을 등록했습니다.");
 
         return newMember;
     }
+
 
     public static List<AvailableDate> searchAvailableRooms(LocalDate checkIn, LocalDate checkOut) {
 
@@ -84,7 +109,7 @@ public class Controller {
         Reservation reservation = new Reservation(selectedRoomSize, targetMember, availableRooms.get(0).getDate(), availableRooms.get(availableRooms.size() - 1).getDate(), guestNum);
 
         System.out.println("예약이 완료되었습니다.");
-        System.out.println("예약 번호 : " + reservation.hashCode());
+        System.out.println("예약 번호 : " + reservation.getReservationId());
         System.out.println("가격 : " + reservation.getCost() + "만원");
 
         addReservation(reservation);
