@@ -71,7 +71,7 @@ public class Reservation implements Serializable {
     @Override
     public String toString() {
         return  "예약자명: " + member.getName() +
-                "\t 객입타입: " + roomSize +
+                "\t 객실타입: " + roomSize +
                 "\t 체크인: " + checkIn +
                 "\t 체크아웃: " + checkOut +
                 "\t 투숙인원: " + guestNum +
