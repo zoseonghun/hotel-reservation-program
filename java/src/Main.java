@@ -2,6 +2,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static common.Utility.ROOT_DIRECTORY;
@@ -14,6 +15,25 @@ public class Main {
 
         Viewer.mainMenu();
 
+//        showMembers();
+
+    }
+
+    /**
+     * 멤버 확인용 임시 메서드
+     */
+    public static void showMembers() {
+        try (FileInputStream fis = new FileInputStream(ROOT_DIRECTORY + "sav/member.sav")) {
+
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            List<Member> obj = (List<Member>) ois.readObject();
+
+            obj.forEach(System.out::println);
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

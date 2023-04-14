@@ -3,9 +3,11 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import static common.Utility.longToBase64;
+
 public class Reservation implements Serializable {
 
-    private long reservationId;
+    private String reservationId;
     private RoomSize roomSize;
     private Member member;
     private LocalDate checkIn;
@@ -22,8 +24,12 @@ public class Reservation implements Serializable {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.guestNum = guestNum;
-        this.reservationId = hashCode() + Integer.MAX_VALUE * 100L + 2;
+        this.reservationId = makeId();
         calcCost();
+    }
+
+    private String makeId() {
+        return longToBase64(hashCode());
     }
 
     private void calcCost() {
@@ -32,14 +38,19 @@ public class Reservation implements Serializable {
             case DELUXE_DOUBLE:
             case DELUXE_TWIN:
                 wonPerDay = 20;
+                break;
             case BOUTIQUE_KING:
                 wonPerDay = 30;
+                break;
             case JR_SUITE:
                 wonPerDay = 40;
+                break;
             case SUITE:
                 wonPerDay = 50;
+                break;
             case PRESIDENTIAL_SUITE:
                 wonPerDay = 60;
+                break;
         }
 
         int additionalCost = 0;
@@ -59,15 +70,13 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return "Reservation{" +
-                "reservationId=" + reservationId +
-                ", roomSize=" + roomSize +
-                ", member=" + member +
-                ", checkIn=" + checkIn +
-                ", checkOut=" + checkOut +
-                ", guestNum=" + guestNum +
-                ", cost=" + cost +
-                '}';
+        return  "예약자명: " + member.getName() +
+                "\t 객실타입: " + roomSize +
+                "\t 체크인: " + checkIn +
+                "\t 체크아웃: " + checkOut +
+                "\t 투숙인원: " + guestNum +
+                "\t 객실요금: " + cost +
+                "\t 예약번호: " + reservationId;
     }
 
     @Override
@@ -75,19 +84,19 @@ public class Reservation implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
-        return Objects.equals(member, that.member) && Objects.equals(checkIn, that.checkIn) && Objects.equals(checkOut, that.checkOut);
+        return guestNum == that.guestNum && roomSize == that.roomSize && Objects.equals(member, that.member) && Objects.equals(checkIn, that.checkIn) && Objects.equals(checkOut, that.checkOut);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(member, checkIn, checkOut, guestNum, cost);
+        return Objects.hash(roomSize, member, checkIn, checkOut, guestNum);
     }
 
-    public long getReservationId() {
+    public String getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(int reservationId) {
+    public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
     }
 
