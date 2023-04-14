@@ -16,12 +16,37 @@ public class ReviewService {
             int answer = Integer.parseInt(scanner.nextLine());
 
             if (answer == 1) { // 상세보기
-                System.out.println("게시글 번호를 선택하세요.>>");
-                int select = Integer.parseInt(input(">>"));
+                int select = 0;
+                while (true) {
+                    System.out.println("게시글 번호를 선택하세요.>>");
+                    try {
+                        select = Integer.parseInt(input(">>"));
+
+                        if (select > dao.boardList.size() || select < 1)
+                            throw new NumberFormatException();
+
+                        break;
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("범위 내의 숫자만 입력해주세요");
+                    }
+                }
                 dao.boardDetail(select); // 선택한 글의 상세페이지 출력
             } else if (answer == 2) { //삭제하기
-                System.out.println("삭제할 글 번호를 선택하세요>>");
-                int select = Integer.parseInt(input(">>"));
+                int select = 0;
+                while (true) {
+                    System.out.println("삭제할 글 번호를 선택하세요>>");
+                    try {
+                        select = Integer.parseInt(input(">>"));
+
+                        if (select > dao.boardList.size() || select < 1)
+                            throw new NumberFormatException();
+
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("범위 내의 숫자만 입력해주세요");
+                    }
+                }
                 dao.boardDelete(select); // 선택한 글 삭제
             } else if (answer == 3) { // 종료
                 System.out.println("게시판 프로그램이 종료되었습니다.");
