@@ -34,4 +34,12 @@ public class Utility {
     public static void pause(){
         input("계속 진행하시려면 엔터를 입력하세요");
     }
+
+    public static void clear() {
+        try {
+            Runtime.getRuntime().exec("cls");
+        } catch (IOException e) {
+            System.out.println("클리어 하는데 오류 발생!");
+        }
+    }
 }

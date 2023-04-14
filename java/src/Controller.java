@@ -191,6 +191,11 @@ public class Controller {
         return rsvnList;
     }
 
+    // 전제 예약 리스트
+    public static List<Reservation> searchReservation() {
+        return reservationList;
+    }
+
     //예약 수정하기 선택시
     //예약삭제 메서드를 내부에서 호출합니다.
     //      -> 멤버 숙박일수, 마일리지, 멤버예약리스트에서 내역 삭제 진행

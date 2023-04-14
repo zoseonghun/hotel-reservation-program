@@ -32,7 +32,8 @@ public class Viewer {
                 case "2":
                     //예약리스트 받기
                     List<Reservation> rsvnList = searchReservationMenu();
-                    if (rsvnList == null) {
+                    if (rsvnList == null || rsvnList.isEmpty()) {
+                        System.out.println("조회된 예약 내역이 없습니다");
                         break;
                     }
                     //예약리스트 중 수정대상인 예약건 선택하기
@@ -370,7 +371,7 @@ public class Viewer {
         String searchWith;
         List<Reservation> rsvnList;
         while (true) {
-            System.out.println("1. 회원정보로 예약찾기 \n2. 예약번호로 예약찾기");
+            System.out.println("1. 회원정보로 예약찾기 \n2. 예약번호로 예약찾기\n3. 전체 예약 목록에서 선택");
             String select = input(">> ");
             //1번 회원정보로 예약찾기
             if (select.equals("1")) {
@@ -390,6 +391,9 @@ public class Viewer {
             } else if (select.equals("2")) {
                 searchWith = input("예약번호 >>");
                 rsvnList = Controller.searchReservation(searchWith);
+                break;
+            } else if (select.equals("3")) {
+                rsvnList = Controller.searchReservation();
                 break;
             } else {
                 //1, 2 이외 입력시 선택으로 돌아가기
