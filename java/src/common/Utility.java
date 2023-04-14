@@ -62,4 +62,12 @@ public class Utility {
         } while (number != 0);
         return new String(buf, charPos, (64 - charPos));
     }
+
+    public static void clear() {
+        try {
+            Runtime.getRuntime().exec("cls");
+        } catch (IOException e) {
+            System.out.println("클리어 하는데 오류 발생!");
+        }
+    }
 }
