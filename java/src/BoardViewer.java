@@ -107,8 +107,22 @@ public class BoardViewer {
             for (Review rv : boardList) { // 글 번호를 1번부터 시작하기 위해 인덱스 +1
                 // 제목, 작성자 글자가 5자 넘어가면 3항연산자 사용 나머지 부분 ...으로 표시
                 // 제목, 작성자 5글자 한글기준으로 맞춤
+
+                String rateInStar = "";
+                switch (rv.getRate()) {
+                    case EXCELLENT:
+                        rateInStar = "★★★";
+                        break;
+                    case GOOD:
+                        rateInStar = "★★";
+                        break;
+                    case BAD:
+                        rateInStar = "★";
+                        break;
+                }
+
                 System.out.printf("%5s%16s%15s%15s%17s%20s\n", boardList.indexOf(rv) + 1,
-                        rv.getRate(),   // 평점
+                        rateInStar,   // 평점
                         rv.getTitle().length() > 5 ? rv.getTitle().substring(0, 5) + "..." : rv.getTitle(), //  제목
                         rv.getWriter().length() > 5 ? rv.getWriter().substring(0, 5) + "..." : rv.getWriter(),  //  작성자
                         rv.getRegistDate(), rv.getReservation()); // 작성일, 예약번호
