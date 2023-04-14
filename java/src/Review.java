@@ -1,10 +1,12 @@
+import java.time.LocalDate;
+
 public class Review {
 
     private int num;
     private String title;
     private String detail;
     private String writer;
-    private Reservation reservation;
+    private String reservation;
     private Rate rate;
     private String reply;
     private String registDate;
@@ -12,15 +14,16 @@ public class Review {
 
     public Review() {}
 
-    public Review(int num, String title, String detail, String writer, String reply, String registDate) {
+    public Review(int num, String title, String detail, String writer, Rate rate, LocalDate registDate, String reservationId)  {
         this.num = num;
         this.title = title;
         this.detail = detail;
 //        this.writer = reservation.getMember();
-        this.reservation = reservation;
+        this.writer = writer;
+//        this.reservation = reservation;
         this.rate = rate;
-        this.reply = reply;
-        this.registDate = registDate;
+        this.registDate = registDate.toString();
+        this.reservation = reservationId;
     }
 
     @Override
@@ -75,11 +78,11 @@ public class Review {
         this.writer = writer;
     }
 
-    public Reservation getReservation() {
+    public String getReservation() {
         return reservation;
     }
 
-    public void setReservation(Reservation reservation) {
+    public void setReservation(String reservation) {
         this.reservation = reservation;
     }
 

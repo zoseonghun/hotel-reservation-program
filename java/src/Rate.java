@@ -1,3 +1,3 @@
 public enum Rate {
-    EXCELLENT, GOOD, BAD
+    EXCELLENT, GOOD, BAD,
 }
