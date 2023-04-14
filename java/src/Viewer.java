@@ -289,6 +289,9 @@ public class Viewer {
                     checkOut.isAfter(LocalDate.of(2023, 4, 13).plusDays(30)))
                         throw new Exception();
 
+                    if (checkIn.isEqual(checkOut))
+                        throw new Exception();
+
                     dateQueue.add(checkIn);
                     dateQueue.add(checkOut);
 
@@ -297,7 +300,7 @@ public class Viewer {
                 } catch (NumberFormatException e) {
                     System.out.println("구분자를 제외하고는 숫자만 입력해 주세요");
                 } catch (Exception e) {
-                    System.out.println("체크인 날짜가 체크아웃 날짜보다 앞서야 합니다.");
+                    System.out.println("올바른 날짜를 입력해 주세요.");
                 }
             } else {
                 System.out.println("입력 날짜의 수가 맞지 않습니다");
