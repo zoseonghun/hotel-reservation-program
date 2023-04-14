@@ -285,6 +285,10 @@ public class Viewer {
                     if (checkIn.isAfter(checkOut))
                         throw new Exception();
 
+                    if (checkIn.isBefore(LocalDate.of(2023, 4, 13)) ||
+                    checkOut.isAfter(LocalDate.of(2023, 4, 13).plusDays(30)))
+                        throw new Exception();
+
                     dateQueue.add(checkIn);
                     dateQueue.add(checkOut);
 
