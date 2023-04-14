@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -70,13 +71,11 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return  "예약자명: " + member.getName() +
-                "\t 객실타입: " + roomSize +
-                "\t 체크인: " + checkIn +
-                "\t 체크아웃: " + checkOut +
-                "\t 투숙인원: " + guestNum +
-                "\t 객실요금: " + cost +
-                "\t 예약번호: " + reservationId;
+        return MessageFormat.format(
+                "예약자명: {0}\t 객실타입: {1}\t 체크인: {2}\t 체크아웃: {3}" +
+                        "\t 숙박일수: {4}박\t 투숙인원: {5}명\t 객실요금: {6}만원\t 예약번호: {7}"
+                , member.getName(), roomSize, checkIn, checkOut
+                , checkOut.compareTo(checkIn), guestNum, cost, reservationId);
     }
 
     @Override
