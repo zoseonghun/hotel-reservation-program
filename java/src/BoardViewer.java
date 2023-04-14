@@ -6,18 +6,50 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import static common.Utility.ROOT_DIRECTORY;
 import static common.Utility.input;
 
 public class BoardViewer {
     Scanner scanner = new Scanner(System.in);
 
-    List<Review> boardList; // 게시글 객체를 저장할 List
+    public List<Review> boardList; // 게시글 객체를 저장할 List
 
+    // 생성자
     public BoardViewer() {
 
         // 게시글 초기 상태로 리셋
-        this.boardList = resetBoardList();
+//        this.boardList = resetBoardList();
+//        saveBoardList();
 
+        loadBoardList();
+
+    }
+
+    public void loadBoardList() {
+
+        try (FileInputStream fis = new FileInputStream(ROOT_DIRECTORY + "/sav/review.sav")) {
+
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            boardList = (List<Review>) ois.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("댓글목록 불러오기에 실패했습니다.");
+        }
+
+    }
+
+    public void saveBoardList() {
+
+        try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "/sav/review.sav")) {
+
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(boardList);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // 고정된 게시글
@@ -156,11 +188,14 @@ public class BoardViewer {
         }
         if (select == 1) { // 현재 글 댓글 작성
             boardAddreply(rv);
+            saveBoardList();
         } else if (select == 2) { // 현재 글 댓글 수정
             boardReplyUpdate(rv);
+            saveBoardList();
         } else if (select == 3) { // 현재 글 댓글 삭제
             boardReplyDelete(rv);
-        } else if (select == 4) { // 목록으로 이동
+            saveBoardList();
+        } else { // 목록으로 이동
             return;
         }
     }
@@ -253,8 +288,10 @@ public class BoardViewer {
 
         Review rv = new Review();
         rv = boardList.get(select - 1); // 선택한 번호의 객체
-        boardList.remove(boardList.indexOf(rv)); // 해당 인덱스에 있는 객체 삭제
+        boardList.remove(rv); // 해당 인덱스에 있는 객체 삭제
         System.out.println(select + "번 글이 삭제되었습니다.");
+
+        saveBoardList();
     }
 
     public void txtRead() throws Exception { // 입력 스트림 (메모장 파일 읽기)
