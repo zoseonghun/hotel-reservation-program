@@ -1,10 +1,13 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class Reservation {
+import static common.Utility.longToBase64;
 
-    private int reservationId;
+public class Reservation implements Serializable {
+
+    private String reservationId;
     private RoomSize roomSize;
     private Member member;
     private LocalDate checkIn;
@@ -21,40 +24,59 @@ public class Reservation {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.guestNum = guestNum;
-        this.reservationId = hashCode();
+        this.reservationId = makeId();
+        calcCost();
+    }
+
+    private String makeId() {
+        return longToBase64(hashCode());
     }
 
     private void calcCost() {
-        int dolorPerDay = 0;
+        int wonPerDay = 0;
         switch (this.roomSize) {
             case DELUXE_DOUBLE:
             case DELUXE_TWIN:
-                dolorPerDay = 20;
+                wonPerDay = 20;
+                break;
             case BOUTIQUE_KING:
-                dolorPerDay = 30;
+                wonPerDay = 30;
+                break;
             case JR_SUITE:
-                dolorPerDay = 40;
+                wonPerDay = 40;
+                break;
             case SUITE:
-                dolorPerDay = 50;
+                wonPerDay = 50;
+                break;
             case PRESIDENTIAL_SUITE:
-                dolorPerDay = 60;
-        };
+                wonPerDay = 60;
+                break;
+        }
 
-        this.cost = dolorPerDay * ChronoUnit.DAYS.between(this.checkIn, this.checkOut);
+        int additionalCost = 0;
+
+        switch (this.guestNum) {
+            case 3:
+                additionalCost = 2;
+                break;
+            case 4:
+                additionalCost = 4;
+                break;
+        }
+
+        this.cost = wonPerDay * ChronoUnit.DAYS.between(this.checkIn, this.checkOut) + additionalCost;
 
     }
 
     @Override
     public String toString() {
-        return "Reservation{" +
-                "reservationId=" + reservationId +
-                ", roomSize=" + roomSize +
-                ", member=" + member +
-                ", checkIn=" + checkIn +
-                ", checkOut=" + checkOut +
-                ", guestNum=" + guestNum +
-                ", cost=" + cost +
-                '}';
+        return  "예약자명: " + member.getName() +
+                "\t 객실타입: " + roomSize +
+                "\t 체크인: " + checkIn +
+                "\t 체크아웃: " + checkOut +
+                "\t 투숙인원: " + guestNum +
+                "\t 객실요금: " + cost +
+                "\t 예약번호: " + reservationId;
     }
 
     @Override
@@ -62,19 +84,19 @@ public class Reservation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
-        return Objects.equals(member, that.member) && Objects.equals(checkIn, that.checkIn) && Objects.equals(checkOut, that.checkOut);
+        return guestNum == that.guestNum && roomSize == that.roomSize && Objects.equals(member, that.member) && Objects.equals(checkIn, that.checkIn) && Objects.equals(checkOut, that.checkOut);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(member, checkIn, checkOut, guestNum, cost);
+        return Objects.hash(roomSize, member, checkIn, checkOut, guestNum);
     }
 
-    public int getReservationId() {
+    public String getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(int reservationId) {
+    public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
     }
 

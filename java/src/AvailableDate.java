@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
 
-public class AvailableDate {
+public class AvailableDate implements Serializable {
 
     private final LocalDate date;
     private Map<RoomSize, Integer> roomVacancy;

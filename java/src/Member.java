@@ -129,13 +129,7 @@ public class Member implements Serializable {
 
     @Override
     public String toString() {
-        return "Member{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", gender=" + gender +
-                ", mileage=" + mileage +
-                ", history=" + history +
-                '}';
+        return String.format("고객명: %s\n성별: %s\n연락처: %s\n이메일: %s\n누적포인트: %d\n누적숙박일수: %d"
+            , name, gender == Gender.FEMALE ? "여성" : "남성", phone, email, mileage, history);
     }
 }

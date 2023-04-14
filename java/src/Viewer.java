@@ -3,8 +3,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static common.Utility.input;
-import java.util.List;
 import static common.Utility.*;
 
 public class Viewer {
@@ -15,14 +13,16 @@ public class Viewer {
      * 메인 메뉴
      */
     public static void mainMenu() {
+        firstWindow();
+
         while (true) {
 
-            System.out.println("호텔 예약 프로그램 ver : " + PROGRAM_VERSION);
             System.out.println("메뉴를 선택해 주세요");
             System.out.println("1. 새로운 예약");
             System.out.println("2. 예약 수정 / 취소");
             System.out.println("3. 후기 관리");
-            System.out.println("4. 프로그램 종료");
+            System.out.println("4. 고객정보 변경");
+            System.out.println("5. 프로그램 종료");
 
             switch (input(">> ")) {
                 case "1":
@@ -31,7 +31,8 @@ public class Viewer {
                 case "2":
                     //예약리스트 받기
                     List<Reservation> rsvnList = searchReservationMenu();
-                    if (rsvnList == null) {
+                    if (rsvnList == null || rsvnList.isEmpty()) {
+                        System.out.println("조회된 예약 내역이 없습니다");
                         break;
                     }
                     //예약리스트 중 수정대상인 예약건 선택하기
@@ -42,12 +43,43 @@ public class Viewer {
                 case "3":
                     ReviewService.reviewMenu();
                     break;
-                case "4":
+                case "4" :
+                    modifyMemberMenu();
+                case "5":
                     System.exit(0);
                 default:
                     System.out.println("없는 번호입니다. 다시 입력해주세요");
             }
         }
+    }
+
+    private static void modifyMemberMenu() {
+        Member targetMbr = null;
+        while(targetMbr == null) {
+            String name = input("수정할 회원의 이름을 입력하세요 >> ");
+            String phone = input("수정할 회원의 휴대폰 번호를 입력하세요 >> ");
+            targetMbr = Controller.searchMember(name, phone);
+            if (targetMbr == null) {
+                String select = input("일치하는 회원 정보가 없습니다.\n1. 회원정보 다시 입력 2. 메인메뉴로 돌아가기 >> ");
+                if(select.equals("2")){
+                    Viewer.mainMenu();
+                }
+            }
+        }
+        Controller.modifyMemberProfile(targetMbr);
+    }
+
+    private static void firstWindow() {
+        makeLine();
+        makeSideWall();
+        makeSideWall();
+        makeSideWall();
+        System.out.printf("#%31s             #\n", "호텔 예약 프로그램 ver : " + PROGRAM_VERSION);
+        makeSideWall();
+        makeSideWall();
+        makeSideWall();
+        makeLine();
+        pause();
     }
 
     /**
@@ -88,17 +120,27 @@ public class Viewer {
      */
     private static void showTempReservationInfo(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
         System.out.println(targetMember.getName() + "님이 선택하신 예약 정보입니다.");
-        System.out.println("체크인 : " + availableRooms.get(0).getDate());
-        System.out.println("체크아웃 : " + availableRooms.get(availableRooms.size() - 1).getDate());
+
+        LocalDate checkIn = availableRooms.get(0).getDate();
+        System.out.println("체크인 : " + checkIn);
+
+        LocalDate checkOut = availableRooms.get(availableRooms.size() - 1).getDate();
+        System.out.println("체크아웃 : " + checkOut);
+
         System.out.println("룸 타입 : " + selectedRoomSize);
         System.out.println("인원 : " + guestNum);
+        Reservation reservation = new Reservation(selectedRoomSize, targetMember, checkIn, checkOut, guestNum);
+
+        System.out.println("가격 : " + reservation.getCost() + " 만원");
+
 
         while (true) {
-            String choice = input("예약을 확정하시겠습니까? [y/n]");
+            String choice = input("예약을 확정하시겠습니까? [y/n] >> ");
 
             switch (choice.toLowerCase().charAt(0)) {
                 case 'y':
-                    Controller.confirmReservation(targetMember, availableRooms, selectedRoomSize, guestNum);
+                    Controller.confirmReservation(reservation, availableRooms);
+                    pause();
                     return;
                 case 'n':
                     return;
@@ -108,6 +150,7 @@ public class Viewer {
         }
     }
 
+
     /**
      * 인원 선택 메뉴
      * @return : 선택한 인원
@@ -116,7 +159,7 @@ public class Viewer {
 
         while (true) {
             try {
-                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) : "));
+                int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) >> "));
 
                 if (inputNum < 0 || inputNum > 4)
                     throw new NumberFormatException();
@@ -137,17 +180,19 @@ public class Viewer {
 
         System.out.println(availableRooms.get(0).getDate() + "일부터 " + availableRooms.get(availableRooms.size() - 1).getDate() + "일까지 가능한 객실 수 입니다.");
 
-        Map<RoomSize, Integer> minRooms = calcMinRooms(availableRooms);
+        Map<RoomSize, Integer> minRooms = new TreeMap<>(calcMinRooms(availableRooms));
 
         minRooms.forEach((k, v) -> {
-            System.out.print(k + ": ");
+            System.out.printf("%-18s:\t", k);
 
             for (int i = 0; i < v; i++) {
-                System.out.print("#");
+                System.out.print("##");
             }
 
-            System.out.println(v + "개 남음!");
+            System.out.println("\t" + v + "개");
         });
+
+        pause();
 
         List<RoomSize> availableRoomSizeList = new ArrayList<>();
 
@@ -165,7 +210,7 @@ public class Viewer {
                 return availableRoomSizeList.get(Integer.parseInt(input(">> ")) - 1);
             } catch (NumberFormatException e) {
                 System.out.println("숫자만 입력해 주세요");
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("범위를 벗어난 숫자입니");
             }
         }
@@ -200,23 +245,21 @@ public class Viewer {
     /**
      *
      * @param member : 회원
-     * @return
+     * @return : 선택한 일자 내의 AvailableDate 리스트
      */
     private static List<AvailableDate> searchAvailableRoomsMenu(Member member) {
 
         System.out.println(member.getName() + "님의 예약을 진행합니다.");
 
-        Queue<Integer> checkQ = inputDateMenu();
+        Queue<LocalDate> checkQ = inputDateMenu();
 
-        int thisYear = LocalDate.now().getYear();
-
-        LocalDate checkIn = LocalDate.of(thisYear, checkQ.poll(), checkQ.poll());
-        LocalDate checkOut = LocalDate.of(thisYear, checkQ.poll(), checkQ.poll());
+        LocalDate checkIn = checkQ.poll();
+        LocalDate checkOut = checkQ.poll();
 
         return Controller.searchAvailableRooms(checkIn, checkOut);
     }
 
-    private static Queue<Integer> inputDateMenu() {
+    private static Queue<LocalDate> inputDateMenu() {
         // 날짜 구분자
         String delimiter = "/- ";
 
@@ -226,16 +269,31 @@ public class Viewer {
             StringTokenizer checkDateSt = new StringTokenizer(checkDateString, delimiter);
 
             if (checkDateSt.countTokens() == 4) {
-                Queue<Integer> dateQueue = new LinkedList<>();
+                Queue<LocalDate> dateQueue = new LinkedList<>();
 
                 try {
-                    for (int i = 0; i < 4; i++) {
-                        dateQueue.add(Integer.parseInt(checkDateSt.nextToken()));
-                    }
+
+                    int thisYear = LocalDate.now().getYear();
+
+                    LocalDate checkIn = LocalDate.of(thisYear,
+                            Integer.parseInt(checkDateSt.nextToken()),
+                            Integer.parseInt(checkDateSt.nextToken()));
+                    LocalDate checkOut = LocalDate.of(thisYear,
+                            Integer.parseInt(checkDateSt.nextToken()),
+                            Integer.parseInt(checkDateSt.nextToken()));
+
+                    if (checkIn.isAfter(checkOut))
+                        throw new Exception();
+
+                    dateQueue.add(checkIn);
+                    dateQueue.add(checkOut);
+
                     return dateQueue;
+
                 } catch (NumberFormatException e) {
                     System.out.println("구분자를 제외하고는 숫자만 입력해 주세요");
-                    continue;
+                } catch (Exception e) {
+                    System.out.println("체크인 날짜가 체크아웃 날짜보다 앞서야 합니다.");
                 }
             } else {
                 System.out.println("입력 날짜의 수가 맞지 않습니다");
@@ -263,14 +321,32 @@ public class Viewer {
         System.out.println("존재하지 않는 회원입니다.");
         System.out.println("새 회원을 등록합니다.");
         Gender inputGender = inputGenderMenu();
-        String inputEmail = input("email 을 입력해 주세요");
+        String inputEmail = null;
+        while (true) {
+            inputEmail = input("email 을 입력해 주세요 >> ");
+
+            // 유효성 검사
+            if (!inputEmail.equals(""))
+                break;
+
+            System.out.println("올바르지 않은 입력입니다.");
+        }
 
         return Controller.addNewMember(inputName, inputPhone, inputEmail, inputGender);
     }
 
     private static Gender inputGenderMenu() {
         while (true) {
-            switch (input("성별을 입력해주세요 [f/m] >> ").toLowerCase().charAt(0)) {
+            char genderInput;
+
+            // 빈칸 입력시
+            try {
+                genderInput = input("성별을 입력해주세요 [f/m] >> ").toLowerCase().charAt(0);
+            } catch (IndexOutOfBoundsException e) {
+                genderInput = ' ';
+            }
+
+            switch (genderInput) {
                 case 'f':
                     return Gender.FEMALE;
                 case 'm':
@@ -312,9 +388,13 @@ public class Viewer {
         Reservation targetRsvn = null;
         while (targetRsvn == null) {
             int targetIndex;
-            String inputIndex = input("수정 또는 삭제할 예약을 선택해주세오 >> ");
+            System.out.println("수정 또는 삭제할 예약을 선택해주세요 ");
+            String inputIndex = input("0번을 누르시면 메인메뉴로 돌아갑니다. >> ");
             try {
                 targetIndex = Integer.parseInt(inputIndex) - 1;
+                if(targetIndex == -1){
+                    Viewer.mainMenu();
+                }
                 targetRsvn = rsvnList.get(targetIndex);
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 System.out.println("목록에 존재하는 예약건의 번호를 입력해주세요");
@@ -335,7 +415,7 @@ public class Viewer {
         String searchWith;
         List<Reservation> rsvnList;
         while (true) {
-            System.out.println("1. 회원정보로 예약찾기 \n2. 예약번호로 예약찾기");
+            System.out.println("1. 회원정보로 예약찾기 \n2. 예약번호로 예약찾기\n3. 전체 예약 목록에서 선택");
             String select = input(">> ");
             //1번 회원정보로 예약찾기
             if (select.equals("1")) {
@@ -356,6 +436,9 @@ public class Viewer {
                 searchWith = input("예약번호 >>");
                 rsvnList = Controller.searchReservation(searchWith);
                 break;
+            } else if (select.equals("3")) {
+                rsvnList = Controller.searchReservation();
+                break;
             } else {
                 //1, 2 이외 입력시 선택으로 돌아가기
                 System.out.println("원하시는 예약찾기 방법을 숫자로 선택해주세요");
@@ -365,7 +448,4 @@ public class Viewer {
         return rsvnList;
     }
 
-    public static void main(String[] args) {
-        mainMenu();
-    }
 }
