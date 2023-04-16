@@ -10,3 +10,4 @@
 |      | Member, Reservation, Review 작업 |     |
 | 4/12 | Viewer, Controller 1차 작업       | 병합전 |
 | 4/13 | 병합 및 세이브 파일에 데이터 저장 완료         |     |
+| 4/16 | 자잘한 오류 수정                      |     |

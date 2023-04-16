@@ -48,7 +48,7 @@ public class Utility {
                 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
                 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                'Y', 'Z', '#', '$'
+                'Y', 'Z', '-', '.'
         };
         int shift = 6;
         char[] buf = new char[64];

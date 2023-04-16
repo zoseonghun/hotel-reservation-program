@@ -73,9 +73,11 @@ public class Reservation implements Serializable {
     public String toString() {
         return MessageFormat.format(
                 "예약자명: {0}\t 객실타입: {1}\t 체크인: {2}\t 체크아웃: {3}" +
-                        "\t 숙박일수: {4}박\t 투숙인원: {5}명\t 객실요금: {6}만원\t 예약번호: {7}"
+                        "\t 숙박일수: {4}박\t 투숙인원: {5}명\t 객실요금: {6}만원\t 예약번호: {7}" +
+                        "\t 현재 마일리지: {8}"
                 , member.getName(), roomSize, checkIn, checkOut
-                , checkOut.compareTo(checkIn), guestNum, cost, reservationId);
+                , checkOut.compareTo(checkIn), guestNum, cost, reservationId
+                , member.getMileage());
     }
 
     @Override
