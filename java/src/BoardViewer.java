@@ -98,6 +98,7 @@ public class BoardViewer {
     }
 
     public void getBoardList() {
+        System.out.println();
         System.out.println("<<후기 게시판>>");
         System.out.printf("%3s%14s%15s%15s%15s%15s\n", "번호", "평점", "제목", "작성자", "작성일", "예약번호");
         System.out.println("==================================================================================================");
@@ -178,6 +179,7 @@ public class BoardViewer {
         }
         Review rv = new Review(); // 게시글 객체 생성
         rv = boardList.get(select - 1); // 인덱스 = 글번호 -1. 해당 인덱스의 객체를 가져옴
+        System.out.println();
         System.out.println("No. " + select); // 글 번호가 1부터 시작해서 + 1
         System.out.println("제목 : " + rv.getTitle());
         System.out.println("작성자 : " + rv.getWriter());
@@ -190,7 +192,8 @@ public class BoardViewer {
 
         // 프로그램 종료되지 않게 try & catch 처리
         while (true) {
-            System.out.println("(1. 댓글 등록 2. 댓글 수정, 3. 댓글 삭제, 4. 목록) :");
+            System.out.println();
+            System.out.print("(1. 댓글 등록 2. 댓글 수정, 3. 댓글 삭제, 4. 목록) : ");
             try {
                 select = Integer.parseInt(scanner.nextLine());
                 if (select < 1 || select > 4)
@@ -219,6 +222,7 @@ public class BoardViewer {
         System.out.println("작성해주세요:");
         String comment = scanner.nextLine();
         rv.setReply(comment);
+        System.out.println();
         System.out.println("추가 완료했습니다.");
 //        System.out.println(rv.getNum());
         boardDetail(rv.getNum() + 1);
@@ -233,6 +237,7 @@ public class BoardViewer {
         System.out.println("수정할 댓글을 입력해주세요:");
         String updatedReply = scanner.nextLine();
         rv.setReply(updatedReply);
+        System.out.println();
         System.out.println("댓글 수정이 완료되었습니다.");
         System.out.println(rv.getNum());
         boardDetail(rv.getNum() + 1);
