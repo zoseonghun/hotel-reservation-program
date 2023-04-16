@@ -159,7 +159,7 @@ public class Controller {
         reduceAvailableRoom(availableRooms, reservation.getRoomSize());
 
         addReservation(reservation);
-
+        System.out.println();
         System.out.println("예약이 완료되었습니다.");
         System.out.println(reservation);
 

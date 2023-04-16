@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -72,11 +73,17 @@ public class Reservation implements Serializable {
     @Override
     public String toString() {
         return MessageFormat.format(
-                "예약자명: {0}\t 객실타입: {1}\t 체크인: {2}\t 체크아웃: {3}" +
-                        "\t 숙박일수: {4}박\t 투숙인원: {5}명\t 객실요금: {6}만원\t 예약번호: {7}" +
-                        "\t 현재 마일리지: {8}"
-                , member.getName(), roomSize, checkIn, checkOut
-                , checkOut.compareTo(checkIn), guestNum, cost, reservationId
+                "예약자: {0}   객실타입: {1}   체크인: {2}  체크아웃: {3}  " +
+                        "숙박일수: {4}박   인원: {5}명   요금: {6}만원   예약번호: {7}  " +
+                        "현재 마일리지: {8}"
+                , member.getName()
+                , String.format("%20s", roomSize)
+                , checkIn.format(DateTimeFormatter.ofPattern("MM/dd"))
+                , checkOut.format(DateTimeFormatter.ofPattern("MM/dd"))
+                , String.format("%2d", ChronoUnit.DAYS.between(checkIn,checkOut))
+                , guestNum
+                , String.format("%3d", cost)
+                , String.format("%10s", reservationId)
                 , member.getMileage());
     }
 

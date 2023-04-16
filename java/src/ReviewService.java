@@ -21,7 +21,7 @@ public class ReviewService {
                     System.out.println("게시글 번호를 선택하세요.>>");
                     try {
                         select = Integer.parseInt(input(">>"));
-
+                        System.out.println();
                         if (select > dao.boardList.size() || select < 1)
                             throw new NumberFormatException();
 
@@ -35,7 +35,7 @@ public class ReviewService {
             } else if (answer == 2) { //삭제하기
                 int select = 0;
                 while (true) {
-                    System.out.println("삭제할 글 번호를 선택하세요>>");
+                    System.out.println("삭제할 글 번호를 선택하세요");
                     try {
                         select = Integer.parseInt(input(">>"));
 

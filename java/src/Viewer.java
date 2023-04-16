@@ -14,9 +14,8 @@ public class Viewer {
      */
     public static void mainMenu() {
         firstWindow();
-
         while (true) {
-
+            System.out.println();
             System.out.println("메뉴를 선택해 주세요");
             System.out.println("1. 새로운 예약");
             System.out.println("2. 예약 수정 / 취소");
@@ -26,6 +25,7 @@ public class Viewer {
 
             switch (input(">> ")) {
                 case "1":
+                    System.out.println();
                     makeReservation();
                     break;
                 case "2":
@@ -74,7 +74,7 @@ public class Viewer {
         makeSideWall();
         makeSideWall();
         makeSideWall();
-        System.out.printf("#%31s             #\n", "호텔 예약 프로그램 ver : " + PROGRAM_VERSION);
+        System.out.printf("#%31s           #\n", "호텔 예약 프로그램 ver : " + PROGRAM_VERSION);
         makeSideWall();
         makeSideWall();
         makeSideWall();
@@ -119,6 +119,7 @@ public class Viewer {
      * @param guestNum : 묵을 인원
      */
     private static void showTempReservationInfo(Member targetMember, List<AvailableDate> availableRooms, RoomSize selectedRoomSize, int guestNum) {
+        System.out.println();
         System.out.println(targetMember.getName() + "님이 선택하신 예약 정보입니다.");
 
         LocalDate checkIn = availableRooms.get(0).getDate();
@@ -156,7 +157,7 @@ public class Viewer {
      * @return : 선택한 인원
      */
     private static int selectGuestNum() {
-
+        System.out.println();
         while (true) {
             try {
                 int inputNum = Integer.parseInt(input("인원 수를 입력해 주세요 ( 1 ~ 4 ) >> "));
@@ -177,7 +178,7 @@ public class Viewer {
      * @return : 방 사이즈
      */
     private static RoomSize showAndSelectAvailableRooms(List<AvailableDate> availableRooms) {
-
+        System.out.println();
         System.out.println(availableRooms.get(0).getDate() + "일부터 " + availableRooms.get(availableRooms.size() - 1).getDate() + "일까지 가능한 객실 수 입니다.");
 
         Map<RoomSize, Integer> minRooms = new TreeMap<>(calcMinRooms(availableRooms));
@@ -248,7 +249,7 @@ public class Viewer {
      * @return : 선택한 일자 내의 AvailableDate 리스트
      */
     private static List<AvailableDate> searchAvailableRoomsMenu(Member member) {
-
+        System.out.println();
         System.out.println(member.getName() + "님의 예약을 진행합니다.");
 
         Queue<LocalDate> checkQ = inputDateMenu();
@@ -324,9 +325,10 @@ public class Viewer {
     }
 
     private static Member addNewMemberMenu(String inputName, String inputPhone) {
-
+        System.out.println();
         System.out.println("존재하지 않는 회원입니다.");
         System.out.println("새 회원을 등록합니다.");
+        System.out.println();
         Gender inputGender = inputGenderMenu();
         String inputEmail = null;
         while (true) {
@@ -389,14 +391,17 @@ public class Viewer {
     //예약번호로 1건만 조회되었을때는 따로 선택하지 않으려고 했는데 프로그램 실행시 같은 예약번호로 2건 중복출력되는 버그가 있어서
     //예약번호 조회시에도 동일하게 진행합니다.
     private static Reservation selectReservation(List<Reservation> rsvnList) {
+        System.out.println();
         for (int i = 0; i < rsvnList.size(); i++) {
             System.out.println((i + 1) + ". " + rsvnList.get(i));
         }
         Reservation targetRsvn = null;
         while (targetRsvn == null) {
             int targetIndex;
+            System.out.println();
             System.out.println("수정 또는 삭제할 예약을 선택해주세요 ");
             String inputIndex = input("0번을 누르시면 메인메뉴로 돌아갑니다. >> ");
+            System.out.println();
             try {
                 targetIndex = Integer.parseInt(inputIndex) - 1;
                 if(targetIndex == -1){
@@ -422,10 +427,12 @@ public class Viewer {
         String searchWith;
         List<Reservation> rsvnList;
         while (true) {
+            System.out.println();
             System.out.println("1. 회원정보로 예약찾기 \n2. 예약번호로 예약찾기\n3. 전체 예약 목록에서 선택");
             String select = input(">> ");
             //1번 회원정보로 예약찾기
             if (select.equals("1")) {
+                System.out.println();
                 searchName = input("회원 이름 >>");
                 searchNumber = input("회원 휴대폰 번호 >>");
                 Member mbr = Controller.searchMember(searchName, searchNumber);

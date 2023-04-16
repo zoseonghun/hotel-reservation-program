@@ -26,7 +26,6 @@ public class Utility {
     public static void makeLine() {
         System.out.println("====================================================");
     }
-
     public static void makeSideWall() {
         System.out.println("#                                                  #");
     }
