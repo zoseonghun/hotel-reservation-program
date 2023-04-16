@@ -10,7 +10,6 @@ public class Controller {
     private static List<AvailableDate> availableDateList;
     private static List<Reservation> reservationList;
     private static List<Member> memberList;
-    private static List<Review> reviewList;
 
     static {
         loadDatabaseInFile();
@@ -18,20 +17,29 @@ public class Controller {
 
     public static void loadMemberList() {
         try (FileInputStream fis = new FileInputStream(ROOT_DIRECTORY + "sav/member.sav")){;
+
             ObjectInputStream ois = new ObjectInputStream(fis);
             memberList = (List<Member>) ois.readObject();
+
         } catch (IOException e) {
-            System.out.println("멤버리스트를 불러오지 못했습니다");
-            e.printStackTrace();
+
+            System.out.println("멤버리스트를 불러오지 못했습니다. 빈 리스트에서 실행됩니다.");
+            memberList = new ArrayList<>();
+
         } catch (ClassNotFoundException e) {
+
             System.out.println("멤버리스트를 불러오지 못했습니다");
+
         }
     }
     public static void saveMemberList() {
+
         try (FileOutputStream fos = new FileOutputStream(ROOT_DIRECTORY + "sav/member.sav")){
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(memberList);
+
         } catch (IOException e) {
+
             System.out.println("멤버리스트를 저장하는데 실패하였습니다");
             e.printStackTrace();
         }
@@ -74,7 +82,6 @@ public class Controller {
 
         loadMemberList();
 
-        reviewList = new ArrayList<>();
     }
 
     private static void loadReservationList() {
@@ -86,7 +93,10 @@ public class Controller {
             reservationList = (List<Reservation>) ois.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
+
+            System.out.println("예약 내역을 불러오지 못했습니다 빈 내역으로 시작합니다");
             reservationList = new ArrayList<>();
+
         }
 
     }
@@ -100,9 +110,11 @@ public class Controller {
             availableDateList = (List<AvailableDate>) ois.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
+
             System.out.println("데이터 로드 오류 발생");
             System.out.println("세이브 파일들이 존재하는지 다시 확인하세요");
             System.exit(1);
+
         }
 
     }
@@ -146,13 +158,14 @@ public class Controller {
     public static void confirmReservation(Reservation reservation, List<AvailableDate> availableRooms) {
         reduceAvailableRoom(availableRooms, reservation.getRoomSize());
 
+        addReservation(reservation);
+
         System.out.println("예약이 완료되었습니다.");
         System.out.println(reservation);
 
-        addReservation(reservation);
-
         updateAvailableRoom();
         updateReservation();
+        saveMemberList();
     }
 
     private static void updateReservation() {
@@ -265,5 +278,6 @@ public class Controller {
 
         updateReservation();
         updateAvailableRoom();
+        saveMemberList();
     }
 }

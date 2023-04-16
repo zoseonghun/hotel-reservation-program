@@ -27,30 +27,41 @@ public class Member implements Serializable {
         this.reservationList = new ArrayList<>();
     }
 
-    public void increaseMileage(int cost){
+    public void increaseMileage(int cost) {
         double mileageRate = getMileageRate();
-        this.mileage += (cost * mileageRate);
+        this.mileage += (cost * mileageRate * 10000);
     }
 
     public double getMileageRate() {
         double result;
         switch (this.history / 10) {
-            case 0 : result = 0.01;
-            case 1 : result = 0.02;
-            case 2 : case 3 : case 4 : result = 0.05;
-            default : result = 0.1;
+            case 0:
+                result = 0.01;
+                break;
+            case 1:
+                result = 0.02;
+                break;
+            case 2:
+            case 3:
+            case 4:
+                result = 0.05;
+                break;
+            default:
+                result = 0.1;
         };
         return result;
     }
-    public void addReservationList(Reservation reservation){
-        increaseMileage((int)reservation.getCost());
+
+    public void addReservationList(Reservation reservation) {
+        increaseMileage((int) reservation.getCost());
         this.reservationList.add(reservation);
         setHistory(getHistory() + 1);
     }
-    public void removeReservationList(Reservation reservation){
+
+    public void removeReservationList(Reservation reservation) {
         setHistory(getHistory() - 1);
         this.reservationList.remove(reservation);
-        decreaseMileage((int)reservation.getCost());
+        decreaseMileage((int) reservation.getCost());
     }
 
     private void decreaseMileage(int cost) {
@@ -130,6 +141,6 @@ public class Member implements Serializable {
     @Override
     public String toString() {
         return String.format("고객명: %s\n성별: %s\n연락처: %s\n이메일: %s\n누적포인트: %d\n누적숙박일수: %d"
-            , name, gender == Gender.FEMALE ? "여성" : "남성", phone, email, mileage, history);
+                , name, gender == Gender.FEMALE ? "여성" : "남성", phone, email, mileage, history);
     }
 }
