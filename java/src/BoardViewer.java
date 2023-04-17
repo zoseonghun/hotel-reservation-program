@@ -18,8 +18,8 @@ public class BoardViewer {
     public BoardViewer() {
 
         // 게시글 초기 상태로 리셋
-//        this.boardList = resetBoardList();
-//        saveBoardList();
+        this.boardList = resetBoardList();
+        saveBoardList();
 
         loadBoardList();
 
@@ -58,35 +58,35 @@ public class BoardViewer {
         this.boardList = new ArrayList<>();
 
         return List.of(
-                new Review(boardList.size(),
+                new Review(0,
                         "너무 좋아요! 무료업그레이드 감사합니다.ㅠㅠ",
                         "직원분들도 너무 친절하시고 또 부대시설도 만족스럽습니다. 안에 있는 사우나도 이용했는데 완전 좋았어요~",
                         "나홀로 여행",
                         Rate.EXCELLENT,
                         LocalDate.now(),
                         "970488461"),
-                new Review(boardList.size(),
+                new Review(1,
                         "좋은 위치 강남권에서 좋은 선택",
                         "신논현역에서 도보로 5분 정도 거리. 위치 좋음. 가격 위치 시설 고려 시 강남권에서 좋은 선택지~",
                         "떠돌이 방랑객",
                         Rate.GOOD,
                         LocalDate.of(2023, 4, 8),
                         "163580591"),
-                new Review(boardList.size(),
+                new Review(2,
                         "깔끔해서 편했습니다",
                         "시설전체가 깔끔해서 1박 편안하게 보냈습니다. 직원분들 응대도 친절했습니다",
                         "재방문 예정",
                         Rate.EXCELLENT,
                         LocalDate.of(2023, 3, 29),
                         "262597186"),
-                new Review(boardList.size(),
+                new Review(3,
                         "여기는 프론트가 왕이셔 , 피곤한분들 체크인도 조심해서 해야해",
                         "최악",
                         "다시는 안가요",
                         Rate.BAD,
                         LocalDate.of(2023, 2, 10),
                         "1355473404"),
-                new Review(boardList.size(),
+                new Review(4,
                         "숙박거부당했습니다",
                         "환불조치도 이루어지지 않았구요 주저리주저리 떠들기도 짜증나네요",
                         "별로요",
@@ -178,6 +178,7 @@ public class BoardViewer {
             return;
         }
         Review rv = new Review(); // 게시글 객체 생성
+        System.out.println("select = " + select);
         rv = boardList.get(select - 1); // 인덱스 = 글번호 -1. 해당 인덱스의 객체를 가져옴
         System.out.println();
         System.out.println("No. " + select); // 글 번호가 1부터 시작해서 + 1
