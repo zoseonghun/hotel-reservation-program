@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="reservationPJ:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/reservationPJ_jar</output-path>
-    <root id="archive" name="reservationPJ.jar">
-      <element id="module-output" name="java" />
-    </root>
-  </artifact>
-</component>
