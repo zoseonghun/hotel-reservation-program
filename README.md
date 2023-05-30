@@ -123,6 +123,17 @@
 - 리뷰 관리
 
 ## 아키텍쳐
+
+### Flow Chart
+
+![순서도 이미지.png](flow%20chart%2F%EC%88%9C%EC%84%9C%EB%8F%84%20%EC%9D%B4%EB%AF%B8%EC%A7%80.png)
+
+### ERD
+
+![클래스 다이어그램.png](flow%20chart%2F%ED%81%B4%EB%9E%98%EC%8A%A4%20%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8.png)
+
+### Directory
+
 ```
 .
 ├── README.md
