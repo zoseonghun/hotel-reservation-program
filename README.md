@@ -29,8 +29,9 @@
   - 예약 수정, 삭제 구현
   - 고객정보 수정 구현
 - 조성훈
-  - [깃허브](https://github.com/nuhgnoesoj)
-  -
+  - [깃허브](https://github.com/zoseonghun)
+  - 후기 리뷰 게시판 작성 구현
+  - 리뷰 글에 댓글 작성 및 수정 삭제 구현
 
 ## 프로젝트 소개
 > 객체지향 설계 원칙인 SOLID 를 공부하기 위한 JAVA 프로그램입니다.<br>
